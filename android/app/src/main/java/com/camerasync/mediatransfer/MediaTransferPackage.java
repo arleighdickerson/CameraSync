@@ -1,4 +1,4 @@
-package com.camerasync.usb;
+package com.camerasync.mediatransfer;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-public class UsbDevicesPackage implements ReactPackage {
+public class MediaTransferPackage implements ReactPackage {
 
   @Nonnull
   @Override
@@ -22,7 +22,7 @@ public class UsbDevicesPackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
     List<NativeModule> modules = new ArrayList<>();
-    modules.add(new UsbDevicesModule(reactContext));
+    modules.add(new DeviceManagerModule(reactContext));
     return modules;
   }
 }

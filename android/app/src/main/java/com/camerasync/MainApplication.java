@@ -1,16 +1,11 @@
 package com.camerasync;
 
 import android.app.Application;
-import android.util.Log;
-
 import com.facebook.react.PackageList;
-import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
-import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {

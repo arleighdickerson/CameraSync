@@ -1,4 +1,4 @@
-package com.camerasync.usb;
+package com.camerasync.mediatransfer;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;

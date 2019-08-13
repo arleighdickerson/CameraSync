@@ -1,7 +1,7 @@
-package com.camerasync.usb;
+package com.camerasync.mediatransfer;
 
-import static com.camerasync.usb.DeviceNotFound.DeviceNameMissing;
-import static com.camerasync.usb.DeviceNotFound.NoDevicesConnected;
+import static com.camerasync.mediatransfer.DeviceNotFound.DeviceNameMissing;
+import static com.camerasync.mediatransfer.DeviceNotFound.NoDevicesConnected;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -21,21 +21,21 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
-public class UsbDevicesModule extends ReactContextBaseJavaModule {
+public class DeviceManagerModule extends ReactContextBaseJavaModule {
 
-  private static final String ACTION_USB_PERMISSION = UsbDevicesModule.class
+  private static final String ACTION_USB_PERMISSION = DeviceManagerModule.class
     .getPackage()
     .getName()
     + ".ACTION_USB_PERMISSION";
 
-  public UsbDevicesModule(ReactApplicationContext reactContext) {
+  public DeviceManagerModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 
   @Nonnull
   @Override
   public String getName() {
-    return "UsbDevicesModule";
+    return "UsbManager";
   }
 
   @Override
@@ -46,20 +46,11 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void fetchDeviceList(Promise promise) {
-    WritableMap map = Arguments.createMap();
-
-    for (Entry<String, UsbDevice> entry : getUsbManager().getDeviceList().entrySet()) {
-      String name = entry.getKey();
-      UsbDevice device = entry.getValue();
-
-      map.putMap(name, asWritableMap(device));
-
-      promise.resolve(map);
-    }
+    promise.resolve(asWritableMap(getUsbManager().getDeviceList()));
   }
 
   @ReactMethod
-  public void requestPermissionsFromUser(String deviceName, Promise p) {
+  public void authorizeDevice(String deviceName, Promise p) {
     try {
       UsbDevice device = findDeviceByName(deviceName);
       requestUsbPermission(device, p);
@@ -128,6 +119,14 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
     return (UsbManager)
       getReactApplicationContext()
         .getSystemService(Context.USB_SERVICE);
+  }
+
+  private WritableMap asWritableMap(Map<String, UsbDevice> devices) {
+    WritableMap deviceMap = Arguments.createMap();
+    for (Entry<String, UsbDevice> entry : devices.entrySet()) {
+      deviceMap.putMap(entry.getKey(), asWritableMap(entry.getValue()));
+    }
+    return deviceMap;
   }
 
   private WritableMap asWritableMap(UsbDevice device) {
