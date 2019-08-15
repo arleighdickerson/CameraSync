@@ -9,20 +9,19 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-public class MediaTransferPackage implements ReactPackage {
+public class UsbDevicesPackage implements ReactPackage {
 
   @Nonnull
   @Override
   public List<ViewManager> createViewManagers(@Nonnull ReactApplicationContext reactContext) {
     return Collections.emptyList();
-
   }
 
   @Nonnull
   @Override
   public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
     List<NativeModule> modules = new ArrayList<>();
-    modules.add(new DeviceManagerModule(reactContext));
+    modules.add(new UsbDevicesModule(reactContext));
     return modules;
   }
 }

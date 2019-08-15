@@ -190,7 +190,8 @@ android {
 dependencies {
   implementation fileTree(dir: "libs", include: ["*.jar"])
   implementation "com.facebook.react:react-native:+"  // From node_modules
-  implementation 'com.github.mjdev:libaums:0.7.0'
+  compileOnly "org.projectlombok:lombok:1.18.8"
+  annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
   if (enableHermes) {
     def hermesPath = "../../node_modules/hermesvm/android/";
