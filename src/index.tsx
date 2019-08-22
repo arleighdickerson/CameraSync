@@ -28,9 +28,7 @@ const store = createStore({
 
 const App = createReduxContainer(AppNavigator);
 const AppWithNavigationState = connect(mapStateToProps)(App);
-
 require('./test').default();
-
 export default () => (
   <Provider store={store}>
     <AppWithNavigationState/>

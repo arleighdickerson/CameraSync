@@ -10,14 +10,14 @@ function handler(event) {
 }
 
 export default async () => {
-  const auths = await Promise.all([
+  await Promise.all([
     UsbDevices.authorizeStorage(),
     UsbDevices.authorizeDevice(),
   ]);
 
-  console.log(auths);
-
-  DeviceEventEmitter.addListener('MTP_EVENT', handler);
-
-  UsbDevices.start();
-}
+  try {
+    await UsbDevices.start();
+  } catch (e) {
+    console.log(e);
+  }
+};

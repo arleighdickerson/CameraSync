@@ -41,4 +41,13 @@ public final class ConversionUtil {
 
     return deviceParams;
   }
+
+  public static WritableMap asWritableMap(MtpEvent event) {
+    WritableMap payload = Arguments.createMap();
+    payload.putInt("eventCode", event.getEventCode());
+    payload.putInt("param1", event.getParameter1());
+    payload.putInt("param2", event.getParameter2());
+    payload.putInt("param3", event.getParameter3());
+    return payload;
+  }
 }

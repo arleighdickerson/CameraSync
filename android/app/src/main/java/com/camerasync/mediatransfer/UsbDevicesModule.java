@@ -12,29 +12,22 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.mtp.MtpDevice;
 import android.mtp.MtpEvent;
-import android.os.AsyncTask;
-import android.os.CancellationSignal;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.OperationCanceledException;
-import android.util.Log;
 import com.camerasync.MainActivity;
 import com.camerasync.mediatransfer.DeviceNotFound.NoDevicesConnected;
+import com.camerasync.util.ConversionUtil;
 import com.camerasync.util.PermissionResultHandler.PermissionResultListener;
-import com.facebook.react.bridge.Arguments;
+import com.facebook.react.HeadlessJsTaskService;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 public class UsbDevicesModule extends ReactContextBaseJavaModule {
 
@@ -42,7 +35,6 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
     .getPackage()
     .getName()
     + ".ACTION_USB_PERMISSION";
-  private ReadMtpEvents task;
 
   UsbDevicesModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -83,12 +75,41 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  @SneakyThrows
-  public void start(Promise p) {
+  public void readEvent(Promise p) {
     UsbDevice usbDevice = getConnectedDevice();
-    requestUsbPermission(usbDevice, p);
-    ReadEventsAsync task = new ReadEventsAsync(this);
-    task.execute();
+    if (usbDevice == null) {
+      p.reject(new NoDevicesConnected());
+    }
+
+    MtpDevice mtpDevice = new MtpDevice(usbDevice);
+    UsbDeviceConnection conn = getUsbManager().openDevice(usbDevice);
+    if (conn == null) {
+      p.reject("Open usbDevice failed");
+    }
+    if (!mtpDevice.open(conn)) {
+      p.reject("Open mtpDevice failed");
+    }
+
+    try {
+      MtpEvent event = mtpDevice.readEvent(null);
+      p.resolve(ConversionUtil.asWritableMap(event));
+    } catch (Exception e) {
+      p.reject(e);
+    }
+  }
+
+  @ReactMethod
+  public void start(Promise p) {
+    Intent service = new Intent(
+      getReactApplicationContext().getApplicationContext(),
+      HeadlessTaskService.class
+    );
+    Bundle bundle = new Bundle();
+    service.putExtras(bundle);
+
+    getReactApplicationContext().getApplicationContext().startService(service);
+    HeadlessJsTaskService.acquireWakeLockNow(getReactApplicationContext().getApplicationContext());
+    p.resolve(null);
   }
 
   protected UsbDevice getConnectedDevice() {
@@ -142,65 +163,5 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
     return (UsbManager)
       getReactApplicationContext()
         .getSystemService(Context.USB_SERVICE);
-  }
-
-  @RequiredArgsConstructor
-  static class ReadEventsAsync extends AsyncTask<Void, MtpEvent, Void> {
-
-    private final CancellationSignal signal = new CancellationSignal();
-    private final UsbDevicesModule module;
-
-    private UsbDevice usbDevice;
-    private UsbDeviceConnection conn;
-    private MtpDevice mtpDevice;
-
-    protected void emit(MtpEvent event) {
-      WritableMap payload = Arguments.createMap();
-      payload.putInt("eventCode", event.getEventCode());
-      payload.putInt("param1", event.getParameter1());
-      payload.putInt("param2", event.getParameter2());
-      payload.putInt("param3", event.getParameter3());
-
-      module.getReactApplicationContext()
-        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-        .emit("MTP_EVENT", payload);
-    }
-
-    @Override
-    protected void onPreExecute() {
-      super.onPreExecute();
-      usbDevice = module.getConnectedDevice();
-      conn = module.getUsbManager().openDevice(usbDevice);
-      mtpDevice = new MtpDevice(usbDevice);
-      mtpDevice.open(conn);
-    }
-
-    public void stop() {
-      if (!isCancelled()) {
-        signal.cancel();
-      }
-    }
-
-    @Override
-    @SneakyThrows
-    protected Void doInBackground(Void... nada) {
-      final String tag = this.getClass().getPackage().getName();
-      while (!isCancelled()) {
-        try {
-          MtpEvent event = mtpDevice.readEvent(signal);
-          Log.d(tag, "got event");
-          emit(event);
-          publishProgress(event);
-        } catch (OperationCanceledException e) {
-          break;
-        } catch (IOException e) {
-          this.cancel(true);
-          Log.e(tag, "Exception while attempting to read event from MtpDevice", e);
-          throw e;
-        }
-      }
-      return null;
-    }
-
   }
 }
