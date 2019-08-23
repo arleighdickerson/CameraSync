@@ -1,7 +1,7 @@
 package com.camerasync;
 
 import android.app.Application;
-import com.camerasync.mediatransfer.UsbDevicesPackage;
+import com.camerasync.mediatransfer.MediaTransferPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -21,7 +21,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       // Packages that cannot be autolinked yet can be added manually here, for example:
-      packages.add(new UsbDevicesPackage());
+      packages.add(new MediaTransferPackage());
       return packages;
     }
 

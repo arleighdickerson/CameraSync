@@ -1,4 +1,4 @@
-package com.camerasync.mediatransfer;
+package com.camerasync.mediatransfer.permissions;
 
 import android.Manifest.permission;
 import android.app.PendingIntent;
@@ -10,11 +10,14 @@ import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Environment;
+import com.camerasync.mediatransfer.devices.DevicesModule;
 import com.facebook.react.ReactActivity;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.PermissionListener;
 import java.io.File;
 import java.util.HashMap;
@@ -33,7 +36,7 @@ public class PermissionsModule extends ReactContextBaseJavaModule {
 
   private final DevicesModule devicesModule;
 
-  PermissionsModule(ReactApplicationContext reactContext, DevicesModule devicesModule) {
+  public PermissionsModule(ReactApplicationContext reactContext, DevicesModule devicesModule) {
     super(reactContext);
     this.devicesModule = devicesModule;
   }

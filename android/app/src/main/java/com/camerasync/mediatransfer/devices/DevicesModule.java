@@ -1,8 +1,9 @@
-package com.camerasync.mediatransfer;
+package com.camerasync.mediatransfer.devices;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import com.camerasync.mediatransfer.devices.DeviceEvent.Type;
 import com.camerasync.util.ConversionUtil;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -10,6 +11,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,12 +20,14 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-// https://www.codepool.biz/how-to-monitor-usb-events-on-android.html
 public class DevicesModule extends ReactContextBaseJavaModule {
 
-  DevicesModule(ReactApplicationContext reactContext) {
+  public DevicesModule(ReactApplicationContext reactContext) {
     super(reactContext);
+    EventBus.getDefault().register(this);
   }
 
   @Nonnull
@@ -43,15 +47,35 @@ public class DevicesModule extends ReactContextBaseJavaModule {
       constants.put(symbol, symbol);
     });
 
+    Arrays.asList(Type.values()).forEach(symbol -> {
+      constants.put(symbol.toString(), symbol.toString());
+    });
+
     return constants;
   }
+
+
+  @Subscribe
+  public void handleDeviceEvent(DeviceEvent event) {
+    String eventName = event.getType().toString();
+
+    WritableMap params = Arguments.createMap();
+    params.putString("type", event.getType().toString());
+    params.putBoolean("error", false);
+    params.putMap("payload", ConversionUtil.asWritableMap(event.getDevice()));
+
+    getReactApplicationContext()
+      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+      .emit(eventName, params);
+  }
+
 
   @ReactMethod
   public void fetchAll(Promise p) {
     p.resolve(ConversionUtil.asWritableMap(getUsbManager().getDeviceList()));
   }
 
-  protected boolean doWithDevice(String deviceName, Promise p, Consumer<UsbDevice> consumer) {
+  public boolean doWithDevice(String deviceName, Promise p, Consumer<UsbDevice> consumer) {
     try {
       consumer.accept(getDevice(deviceName));
       return true;
@@ -61,7 +85,7 @@ public class DevicesModule extends ReactContextBaseJavaModule {
     }
   }
 
-  protected UsbDevice getDevice(String key) throws DeviceNotFound {
+  public UsbDevice getDevice(String key) throws DeviceNotFound {
     if (key == null) {
       return getDevice();
     }
@@ -78,7 +102,7 @@ public class DevicesModule extends ReactContextBaseJavaModule {
     }
   }
 
-  protected UsbDevice getDevice() throws DeviceNotFound {
+  public UsbDevice getDevice() throws DeviceNotFound {
     try {
       return getDeviceOption().get();
     } catch (NoSuchElementException e) {
@@ -86,11 +110,11 @@ public class DevicesModule extends ReactContextBaseJavaModule {
     }
   }
 
-  protected Optional<UsbDevice> getDeviceOption() {
+  public Optional<UsbDevice> getDeviceOption() {
     return getDeviceOption(null);
   }
 
-  protected Optional<UsbDevice> getDeviceOption(String key) {
+  public Optional<UsbDevice> getDeviceOption(String key) {
     if (key == null) {
       return getFirstDevice();
     } else {
@@ -103,7 +127,7 @@ public class DevicesModule extends ReactContextBaseJavaModule {
     return devices.isEmpty() ? Optional.empty() : Optional.of(devices.iterator().next());
   }
 
-  protected UsbManager getUsbManager() {
+  public UsbManager getUsbManager() {
     return (UsbManager)
       getReactApplicationContext()
         .getSystemService(Context.USB_SERVICE);

@@ -1,11 +1,14 @@
 package com.camerasync;
 
 import android.util.Log;
+import com.camerasync.mediatransfer.devices.DeviceEvent;
+import com.camerasync.mediatransfer.devices.DeviceEvent.Type;
 import com.camerasync.util.UsbAttachmentListener;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+import org.greenrobot.eventbus.EventBus;
 
 public class MainActivity extends ReactActivity {
 
@@ -31,7 +34,6 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onStart() {
     super.onStart();
-    // EventBus.getDefault().register(this);
     listener.register(this);
   }
 
@@ -39,7 +41,6 @@ public class MainActivity extends ReactActivity {
   protected void onStop() {
     listener.unregister(this);
     super.onStop();
-    // EventBus.getDefault().unregister(this);
   }
 
   private final String tag = getClass().getPackage().getName();
@@ -47,9 +48,11 @@ public class MainActivity extends ReactActivity {
   private final UsbAttachmentListener listener = UsbAttachmentListener.builder()
     .onAttach(((device, context, intent) -> {
       Log.i(tag, "device attached");
+      EventBus.getDefault().post(new DeviceEvent(Type.DEVICE_ATTACHED, device));
     }))
     .onDetach(((device, context, intent) -> {
       Log.i(tag, "device detached");
+      EventBus.getDefault().post(new DeviceEvent(Type.DEVICE_DETACHED, device));
     }))
     .build();
 }
