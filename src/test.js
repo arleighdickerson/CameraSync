@@ -10,14 +10,16 @@ function handler(event) {
 }
 
 export default async () => {
-  await Promise.all([
-    UsbDevices.authorizeStorage(),
-    UsbDevices.authorizeDevice(),
-  ]);
+  const hasStorage = await UsbDevices.hasStorage();
+  const hasDevice = await UsbDevices.hasDevice();
 
-  try {
-    await UsbDevices.start();
-  } catch (e) {
-    console.log(e);
-  }
+  const storageWasAuthorized = await UsbDevices.authorizeStorage();
+  const deviceWasAuthorized = await UsbDevices.authorizeDevice();
+
+  console.log({
+    hasStorage,
+    hasDevice,
+    storageWasAuthorized,
+    deviceWasAuthorized,
+  });
 };
