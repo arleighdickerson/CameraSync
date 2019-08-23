@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Environment;
-import com.camerasync.mediatransfer.DeviceNotFound.NoDevicesConnected;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -18,26 +17,31 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.PermissionListener;
 import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
-public class UsbDevicesModule extends ReactContextBaseJavaModule {
+public class PermissionsModule extends ReactContextBaseJavaModule {
 
-  private static final String ACTION_USB_PERMISSION = UsbDevicesModule.class
+  private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
+  private static final int REQUEST_CODE_USB_PERMISSION = 2;
+
+  private static final String ACTION_USB_PERMISSION = PermissionsModule.class
     .getPackage()
     .getName()
     + ".ACTION_USB_PERMISSION";
 
-  UsbDevicesModule(ReactApplicationContext reactContext) {
+  private final DevicesModule devicesModule;
+
+  PermissionsModule(ReactApplicationContext reactContext, DevicesModule devicesModule) {
     super(reactContext);
+    this.devicesModule = devicesModule;
   }
 
   @Nonnull
   @Override
   public String getName() {
-    return "UsbDevices";
+    return "Permissions";
   }
 
   @Override
@@ -64,29 +68,27 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
 
 
   @ReactMethod
-  public void hasDevice(Promise p) {
-    try {
-      UsbDevice device = getConnectedDevice();
-      if (device == null) {
-        p.reject(new NoDevicesConnected());
-      }
-      p.resolve(getUsbManager().hasPermission(device));
-    } catch (Exception e) {
-      p.reject(e);
+  public void hasDevice(String deviceName, Promise p) {
+    if (devicesModule.getDeviceOption(null).isPresent()) {
+      // when the device is present, check permissions
+      devicesModule.doWithDevice(
+        deviceName,
+        p,
+        device -> p.resolve(devicesModule.getUsbManager().hasPermission(device))
+      );
+    } else {
+      // when the device is absent, default to false
+      p.resolve(false);
     }
   }
 
   @ReactMethod
-  public void authorizeDevice(Promise p) {
-    UsbDevice device = getConnectedDevice();
-    if (device == null) {
-      p.reject(new NoDevicesConnected());
-    }
-    requestUsbPermission(device, p);
+  public void authorizeDevice(String deviceName, Promise p) {
+    devicesModule.doWithDevice(deviceName, p, device -> requestUsbPermission(device, p));
   }
 
   private void requestStoragePermission(Promise p) {
-    final int requestCode = 0;
+    final int requestCode = REQUEST_CODE_STORAGE_PERMISSION;
 
     final PermissionListener listener = (int resultCode, String[] permissions, int[] grantResults) -> {
       if (resultCode == requestCode && permissions[0].equals(permission.WRITE_EXTERNAL_STORAGE)) {
@@ -106,11 +108,17 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
   }
 
   private void requestUsbPermission(UsbDevice device, Promise p) {
+    final int requestCode = REQUEST_CODE_USB_PERMISSION;
     final String actionName = ACTION_USB_PERMISSION;
-    final ReactApplicationContext context = getReactApplicationContext();
+
+    // @todo are these the correct flags?
+    final int flags = PendingIntent.FLAG_UPDATE_CURRENT;
 
     PendingIntent pendingIntent = PendingIntent.getBroadcast(
-      context, 0, new Intent(actionName), 0
+      getReactApplicationContext(),
+      requestCode,
+      new Intent(actionName),
+      flags
     );
 
     // register broadcast receiver
@@ -129,8 +137,8 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
     };
     getReactApplicationContext().registerReceiver(receiver, intentFilter);
 
-    // make request
-    getUsbManager().requestPermission(device, pendingIntent);
+    // make the request
+    devicesModule.getUsbManager().requestPermission(device, pendingIntent);
   }
 
   private File getDestDir() {
@@ -139,16 +147,5 @@ public class UsbDevicesModule extends ReactContextBaseJavaModule {
       new File(Environment.getExternalStorageDirectory(), "DCIM"),
       "Camera"
     );
-  }
-
-  protected UsbDevice getConnectedDevice() {
-    Collection<UsbDevice> devices = getUsbManager().getDeviceList().values();
-    return devices.isEmpty() ? null : devices.iterator().next();
-  }
-
-  private UsbManager getUsbManager() {
-    return (UsbManager)
-      getReactApplicationContext()
-        .getSystemService(Context.USB_SERVICE);
   }
 }

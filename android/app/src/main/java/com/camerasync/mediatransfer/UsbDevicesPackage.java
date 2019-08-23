@@ -20,8 +20,12 @@ public class UsbDevicesPackage implements ReactPackage {
   @Nonnull
   @Override
   public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
+    DevicesModule devicesModule = new DevicesModule(reactContext);
+    PermissionsModule permissionsModule = new PermissionsModule(reactContext, devicesModule);
+
     List<NativeModule> modules = new ArrayList<>();
-    modules.add(new UsbDevicesModule(reactContext));
+    modules.add(devicesModule);
+    modules.add(permissionsModule);
     return modules;
   }
 }

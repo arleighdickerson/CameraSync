@@ -1,6 +1,6 @@
 import { NativeModules, DeviceEventEmitter } from 'react-native';
 
-const { UsbDevices } = NativeModules;
+const { Permissions, Devices } = NativeModules;
 
 function handler(event) {
   console.log(event.eventCode);
@@ -10,11 +10,13 @@ function handler(event) {
 }
 
 export default async () => {
-  const hasStorage = await UsbDevices.hasStorage();
-  const hasDevice = await UsbDevices.hasDevice();
+  /*
+try {
+  const hasStorage = await Permissions.hasStorage();
+  const hasDevice = await Permissions.hasDevice(null);
 
-  const storageWasAuthorized = await UsbDevices.authorizeStorage();
-  const deviceWasAuthorized = await UsbDevices.authorizeDevice();
+  const storageWasAuthorized = await Permissions.authorizeStorage();
+  const deviceWasAuthorized = await Permissions.authorizeDevice(null);
 
   console.log({
     hasStorage,
@@ -22,4 +24,10 @@ export default async () => {
     storageWasAuthorized,
     deviceWasAuthorized,
   });
+} catch (e) {
+  console.dir(e);
+}*/
+
+  const info = await Devices.fetchAll();
+  console.log(info);
 };
