@@ -27,10 +27,11 @@ public class MediaTransferPackage implements ReactPackage {
     PermissionsModule permissionsModule = new PermissionsModule(reactContext, devicesModule);
 
     List<NativeModule> modules = new ArrayList<>();
+
     modules.add(devicesModule);
     modules.add(permissionsModule);
 
-    EventBus.getDefault().register(devicesModule);
+    modules.forEach(m -> EventBus.getDefault().register(m));
 
     return modules;
   }

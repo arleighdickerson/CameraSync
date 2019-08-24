@@ -10,7 +10,7 @@ import {
 import createSagaMiddleware from 'redux-saga';
 
 import createReducer from './reducers';
-import rootSaga from './sagas';
+import rootSaga from './rootSaga';
 
 export interface StoreConfiguration {
     reducers: { [key: string]: Reducer },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, Provider } from 'react-redux';
 
 import {
@@ -13,6 +13,7 @@ import {
 import routes from './routes';
 import createStore from './createStore';
 import registerHandlers from './registerHandlers';
+import readyCallback from './readyCallback';
 
 const AppNavigator = createStackNavigator(routes);
 
@@ -32,10 +33,12 @@ registerHandlers(store);
 const App = createReduxContainer(AppNavigator);
 const AppWithNavigationState = connect(mapStateToProps)(App);
 
-require('./scratch').default();
+export default () => {
+  useEffect(() => readyCallback(store), []);
 
-export default () => (
-  <Provider store={store}>
-    <AppWithNavigationState/>
-  </Provider>
-);
+  return (
+    <Provider store={store}>
+      <AppWithNavigationState/>
+    </Provider>
+  );
+};

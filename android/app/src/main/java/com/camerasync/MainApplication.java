@@ -8,8 +8,16 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 public class MainApplication extends Application implements ReactApplication {
+
+  static {
+    EventBus.builder()
+      .strictMethodVerification(true)
+      .throwSubscriberException(true)
+      .installDefaultEventBus();
+  }
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -30,6 +38,13 @@ public class MainApplication extends Application implements ReactApplication {
       return "index";
     }
   };
+
+  @Override
+  public void onTerminate() {
+    // post terminate event, all subscribers handle by unregistering
+    EventBus.getDefault().post(new ApplicationTerminatedEvent());
+    super.onTerminate();
+  }
 
   @Override
   public ReactNativeHost getReactNativeHost() {

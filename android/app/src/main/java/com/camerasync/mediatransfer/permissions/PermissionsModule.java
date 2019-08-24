@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Environment;
+import com.camerasync.ApplicationTerminatedEvent;
 import com.camerasync.mediatransfer.devices.DevicesModule;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Promise;
@@ -21,6 +22,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class PermissionsModule extends ReactContextBaseJavaModule {
 
@@ -148,5 +151,10 @@ public class PermissionsModule extends ReactContextBaseJavaModule {
       new File(Environment.getExternalStorageDirectory(), "DCIM"),
       "Camera"
     );
+  }
+
+  @Subscribe
+  public void handle(ApplicationTerminatedEvent event) {
+    EventBus.getDefault().unregister(this);
   }
 }

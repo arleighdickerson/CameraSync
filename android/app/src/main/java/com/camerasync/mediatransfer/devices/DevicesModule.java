@@ -3,6 +3,7 @@ package com.camerasync.mediatransfer.devices;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import com.camerasync.ApplicationTerminatedEvent;
 import com.camerasync.util.ConversionUtil;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -19,6 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class DevicesModule extends ReactContextBaseJavaModule {
@@ -129,6 +131,13 @@ public class DevicesModule extends ReactContextBaseJavaModule {
       getReactApplicationContext()
         .getSystemService(Context.USB_SERVICE);
   }
+
+
+  @Subscribe
+  public void handle(ApplicationTerminatedEvent event) {
+    EventBus.getDefault().unregister(this);
+  }
+
 
   static abstract class DeviceNotFound extends java.lang.Exception {
 

@@ -5,7 +5,6 @@
   "scripts": {
     "start": "react-native start",
     "remotedev": "remotedev --hostname=localhost --port=8000",
-    "remotedev:android": "adb reverse tcp:8000 tcp:8000 && npm run remotedev",
     "test": "jest",
     "lint": "eslint --ext .js --ext .ts --ext .d.ts ."
   },

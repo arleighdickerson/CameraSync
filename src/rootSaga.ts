@@ -1,9 +1,9 @@
 import { all } from 'redux-saga/effects';
 
-// import sessionSagas from './session';
+import deviceSaga from './modules/devices/sagas';
 
 export default function* rootSaga() {
   yield all([
-    // sessionSagas()
+    deviceSaga(),
   ]);
 }
