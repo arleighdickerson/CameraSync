@@ -23,8 +23,6 @@ public class MediaTransferPackage implements ReactPackage {
   @Nonnull
   @Override
   public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
-    EventBus eventBus = EventBus.builder().build();
-
     DevicesModule devicesModule = new DevicesModule(reactContext);
     PermissionsModule permissionsModule = new PermissionsModule(reactContext, devicesModule);
 
@@ -32,7 +30,7 @@ public class MediaTransferPackage implements ReactPackage {
     modules.add(devicesModule);
     modules.add(permissionsModule);
 
-    eventBus.register(devicesModule);
+    EventBus.getDefault().register(devicesModule);
 
     return modules;
   }

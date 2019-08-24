@@ -27,7 +27,10 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
 
   const enhancer = (
     __DEV__
-      ? require('remote-redux-devtools').composeWithDevTools({ realtime: true })
+      ? require('remote-redux-devtools').composeWithDevTools({
+        realtime: true,
+        port:     8000,
+      })
       : compose
   )(
     applyMiddleware(...defaultMiddleware, ...middleware),
