@@ -1,8 +1,8 @@
 /*
- * Generated type guards for "index.ts".
+ * Generated type guards for "DeviceInfo.ts".
  * WARNING: Do not manually change this file.
  */
-import { DeviceInfo, DeviceEvent } from "./index";
+import { DeviceInfo } from "./DeviceInfo";
 
 export function isDeviceInfo(obj: any, _argumentName?: string): obj is DeviceInfo {
     return (
@@ -17,17 +17,5 @@ export function isDeviceInfo(obj: any, _argumentName?: string): obj is DeviceInf
         typeof obj.productName === "string" &&
         typeof obj.manufacturerName === "string" &&
         typeof obj.deviceName === "string"
-    )
-}
-
-export function isDeviceEvent(obj: any, _argumentName?: string): obj is DeviceEvent {
-    return (
-        typeof obj === "object" &&
-        (
-            obj.type === "EVENT_DEVICE_ATTACHED" ||
-            obj.type === "EVENT_DEVICE_DETACHED"
-        ) &&
-        isDeviceInfo(obj.payload) as boolean &&
-        typeof obj.error === "boolean"
     )
 }

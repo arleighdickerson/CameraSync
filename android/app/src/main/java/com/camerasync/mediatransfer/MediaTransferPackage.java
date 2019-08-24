@@ -32,6 +32,8 @@ public class MediaTransferPackage implements ReactPackage {
     modules.add(devicesModule);
     modules.add(permissionsModule);
 
+    eventBus.register(devicesModule);
+
     return modules;
   }
 }

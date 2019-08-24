@@ -3,7 +3,6 @@ package com.camerasync.mediatransfer.devices;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import com.camerasync.mediatransfer.devices.DeviceEvent.Type;
 import com.camerasync.util.ConversionUtil;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -20,14 +19,12 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class DevicesModule extends ReactContextBaseJavaModule {
 
   public DevicesModule(ReactApplicationContext reactContext) {
     super(reactContext);
-    EventBus.getDefault().register(this);
   }
 
   @Nonnull
@@ -47,7 +44,7 @@ public class DevicesModule extends ReactContextBaseJavaModule {
       constants.put(symbol, symbol);
     });
 
-    Arrays.asList(Type.values()).forEach(symbol -> {
+    Arrays.asList(DeviceEvent.Type.values()).forEach(symbol -> {
       constants.put(symbol.toString(), symbol.toString());
     });
 

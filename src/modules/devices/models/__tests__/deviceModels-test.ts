@@ -5,7 +5,7 @@ import {
   isDeviceList,
   DeviceEvent,
   isDeviceEvent,
-} from '../';
+} from '../index';
 
 const deviceInfo: DeviceInfo = {
   deviceProtocol:   0,

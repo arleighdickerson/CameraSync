@@ -12,6 +12,7 @@ import {
 
 import routes from './routes';
 import createStore from './createStore';
+import registerHandlers from './registerHandlers';
 
 const AppNavigator = createStackNavigator(routes);
 
@@ -26,9 +27,13 @@ const store = createStore({
   ],
 });
 
+registerHandlers(store);
+
 const App = createReduxContainer(AppNavigator);
 const AppWithNavigationState = connect(mapStateToProps)(App);
+
 require('./scratch').default();
+
 export default () => (
   <Provider store={store}>
     <AppWithNavigationState/>
