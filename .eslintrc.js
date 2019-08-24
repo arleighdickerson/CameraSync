@@ -23,6 +23,12 @@ module.exports = {
 
   overrides: [
     {
+      files: ['*.d.ts'],
+      rules: {
+        semi: 0,
+      },
+    },
+    {
       files:   ['*.js'],
       parser:  'babel-eslint',
       plugins: ['flowtype'],
