@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect, Provider } from 'react-redux';
 
 import {
@@ -29,16 +29,14 @@ const store = createStore({
 });
 
 registerHandlers(store);
+readyCallback(store);
 
 const App = createReduxContainer(AppNavigator);
 const AppWithNavigationState = connect(mapStateToProps)(App);
 
-export default () => {
-  useEffect(() => readyCallback(store), []);
+export default () => (
+  <Provider store={store}>
+    <AppWithNavigationState/>
+  </Provider>
+);
 
-  return (
-    <Provider store={store}>
-      <AppWithNavigationState/>
-    </Provider>
-  );
-};

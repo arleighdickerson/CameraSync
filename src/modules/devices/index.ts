@@ -20,7 +20,7 @@ export const initDeviceList = () => typesafe.action(actionTypes.INIT_DEVICE_LIST
 export const attachAll = (deviceList: DeviceList) => typesafe.action(actionTypes.ATTACH_ALL_DEVICES, deviceList);
 export const detachAll = () => typesafe.action(actionTypes.DETACH_ALL_DEVICES);
 export const attach = (deviceInfo: DeviceInfo) => typesafe.action(actionTypes.ATTACH_DEVICE, deviceInfo);
-export const detach = (deviceName: string) => typesafe.action(actionTypes.DETACH_DEVICE, deviceName);
+export const detach = (deviceName: string) => typesafe.action(actionTypes.DETACH_DEVICE, { deviceName });
 
 function cloneDeviceList(deviceList: DeviceList): DeviceList {
   const newState: DeviceState = {};
