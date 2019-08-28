@@ -9,6 +9,7 @@
     "lint": "eslint --ext .js --ext .ts --ext .d.ts ."
   },
   "dependencies": {
+    "eslint-utils": "^1.4.1",
     "immutable": "^4.0.0-rc.12",
     "react": "16.8.6",
     "react-native": "0.60.4",
@@ -28,7 +29,6 @@
     "@babel/core": "^7.5.5",
     "@babel/runtime": "^7.5.5",
     "@react-native-community/eslint-config": "^0.0.5",
-    "eslint-utils": "1.4.1",
     "@types/jest": "^24.0.17",
     "@types/react": "^16.9.1",
     "@types/react-native": "^0.60.4",
