@@ -13,12 +13,12 @@ function* fetchDevices() {
   yield put(deviceActions.attachAll(deviceList));
 }
 
-function* watchReduxInit() {
+function* watchDeviceListInit() {
   yield takeEvery(INIT_DEVICE_LIST, fetchDevices);
 }
 
 export default function* initializeDevices() {
   yield all([
-    fork(watchReduxInit),
+    fork(watchDeviceListInit),
   ]);
 }
