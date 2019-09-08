@@ -11,6 +11,7 @@
   "dependencies": {
     "eslint-utils": "^1.4.1",
     "immutable": "^4.0.0-rc.12",
+    "injection-js": "^2.2.2",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-elements": "^1.1.0",
@@ -23,10 +24,14 @@
     "redux-form": "^8.2.5",
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.5",
+    "reflect-metadata": "^0.1.13",
     "typesafe-actions": "^4.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.6.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
     "@babel/runtime": "^7.5.5",
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/jest": "^24.0.17",
@@ -36,18 +41,17 @@
     "@types/react-redux": "^7.1.1",
     "@types/react-test-renderer": "^16.9.0",
     "@types/redux-form": "^8.1.4",
+    "babel-generator": "^6.26.1",
     "babel-jest": "^24.8.0",
     "eslint": "^6.1.0",
     "jest": "^24.8.0",
     "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-devtools": "^3.6.3",
+    "react-native-typescript-transformer": "^1.2.13",
     "react-test-renderer": "16.8.6",
     "remote-redux-devtools": "^0.5.16",
     "remotedev-server": "^0.3.1",
     "typescript": "^3.5.3"
-  },
-  "jest": {
-    "preset": "react-native"
   }
 }

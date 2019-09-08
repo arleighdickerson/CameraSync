@@ -1,5 +1,4 @@
 {
-
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -13,7 +12,8 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "exclude": [
     "node_modules",
