@@ -14,7 +14,20 @@ import routes from './routes';
 import createStore from './createStore';
 import registerHandlers from './registerHandlers';
 import readyCallback from './readyCallback';
+import { ReflectiveInjector, Injectable } from 'injection-js';
 
+class Http {
+}
+
+@Injectable()
+class Service {
+  constructor(private http: Http) {
+  }
+}
+
+const injector = ReflectiveInjector.resolveAndCreate([Service, Http]);
+const s = injector.get(Service);
+const isInstance = s instanceof Service;
 const AppNavigator = createStackNavigator(routes);
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
@@ -39,4 +52,3 @@ export default () => (
     <AppWithNavigationState/>
   </Provider>
 );
-
