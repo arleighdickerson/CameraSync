@@ -14,20 +14,8 @@ import routes from './routes';
 import createStore from './createStore';
 import registerHandlers from './registerHandlers';
 import readyCallback from './readyCallback';
-import { ReflectiveInjector, Injectable } from 'injection-js';
+import createIoc from './ioc';
 
-class Http {
-}
-
-@Injectable()
-class Service {
-  constructor(private http: Http) {
-  }
-}
-
-const injector = ReflectiveInjector.resolveAndCreate([Service, Http]);
-const s = injector.get(Service);
-const isInstance = s instanceof Service;
 const AppNavigator = createStackNavigator(routes);
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
@@ -46,6 +34,8 @@ readyCallback(store);
 
 const App = createReduxContainer(AppNavigator);
 const AppWithNavigationState = connect(mapStateToProps)(App);
+
+createIoc();
 
 export default () => (
   <Provider store={store}>

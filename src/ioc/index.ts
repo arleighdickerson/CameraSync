@@ -1,3 +1,4 @@
+import 'core-js/es7/reflect';
 import { ReflectiveInjector, Injectable } from 'injection-js';
 
 class Http {
@@ -9,7 +10,10 @@ class Service {
   }
 }
 
-it('should be able to create a Service instance', () => {
+export default () => {
   const injector = ReflectiveInjector.resolveAndCreate([Service, Http]);
-  expect(injector.get(Service)).toBeInstanceOf(Service);
-});
+  const s = injector.get(Service);
+  const isInstance = s instanceof Service;
+
+  return s;
+};

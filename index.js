@@ -2,7 +2,6 @@
  * @format
  */
 
-import 'core-js/es7/reflect';
 import { AppRegistry } from 'react-native';
 import App from './src';
 import { name as appName } from './app.json';

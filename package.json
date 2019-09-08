@@ -24,7 +24,6 @@
     "redux-form": "^8.2.5",
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.5",
-    "reflect-metadata": "^0.1.13",
     "typesafe-actions": "^4.4.2"
   },
   "devDependencies": {
@@ -32,7 +31,6 @@
     "@babel/generator": "^7.6.0",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.6.0",
-    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
     "@babel/runtime": "^7.5.5",
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/jest": "^24.0.17",
@@ -52,7 +50,6 @@
     "react-test-renderer": "16.8.6",
     "remote-redux-devtools": "^0.5.16",
     "remotedev-server": "^0.3.1",
-    "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   }
 }
