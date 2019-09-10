@@ -1,18 +1,27 @@
-import { ReflectiveInjector, Injectable } from 'injection-js';
+import { Container } from 'inversify';
+import { devicesContainerModule } from 'src/modules/devices/inversify.module';
+import { createGhostObject } from '../util/ghostObject';
 
-class Http {
-}
-
-@Injectable()
-class Service {
-  constructor(private http: Http) {
-  }
-}
-
-export default () => {
-  const injector = ReflectiveInjector.resolveAndCreate([Service, Http]);
-  const s = injector.get(Service);
-  const isInstance = s instanceof Service;
-
-  return s;
+const createContainer = () => {
+  const container = new Container();
+  container.load(devicesContainerModule);
+  return container;
 };
+
+const createFactory = () => {
+  let container: Container | null = null;
+  return (): Container => {
+    if (container === null) {
+      container = createContainer();
+    }
+    return container;
+  };
+};
+
+const factory = createFactory();
+
+export const forceContainerInit = () => factory();
+
+export const container: Container = createGhostObject(factory);
+
+export default container;

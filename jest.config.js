@@ -7,7 +7,7 @@ module.exports = {
   },
   setupFiles: [
     require.resolve('react-native-gesture-handler/jestSetup'),
-    require.resolve('core-js/es7/reflect'),
+    require.resolve('core-js'),
   ],
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?react-native|react-navigation|@react-navigation|react-navigation-redux-helpers)',

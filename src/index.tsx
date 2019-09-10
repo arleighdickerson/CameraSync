@@ -1,4 +1,3 @@
-import 'core-js/es7/reflect';
 import React from 'react';
 import { connect, Provider } from 'react-redux';
 
@@ -15,7 +14,9 @@ import routes from './routes';
 import createStore from './createStore';
 import registerHandlers from './registerHandlers';
 import readyCallback from './readyCallback';
-import createIoc from './ioc';
+import { forceContainerInit } from './ioc';
+
+forceContainerInit();
 
 const AppNavigator = createStackNavigator(routes);
 
@@ -35,8 +36,6 @@ readyCallback(store);
 
 const App = createReduxContainer(AppNavigator);
 const AppWithNavigationState = connect(mapStateToProps)(App);
-
-createIoc();
 
 export default () => (
   <Provider store={store}>

@@ -2,6 +2,7 @@ import * as typesafe from 'typesafe-actions';
 import * as redux from 'redux';
 import * as models from './models';
 import { DeviceList } from './models';
+import * as TYPES from './sources/types';
 
 export enum actionTypes {
     INIT_DEVICE_LIST = 'devices/INIT_DEVICE_LIST',
@@ -58,4 +59,5 @@ const reducer: redux.Reducer = (state: DeviceState = initialState, action: any) 
   }
 };
 
+export { TYPES };
 export default reducer;
