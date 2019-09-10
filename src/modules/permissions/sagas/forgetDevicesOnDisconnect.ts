@@ -2,6 +2,7 @@ import { all, fork, put, takeEvery } from 'redux-saga/effects';
 import { ActionType } from 'typesafe-actions';
 import * as permissionActions from '..';
 import * as deviceActions from '../../devices';
+// import * as deviceActions from 'src/modules/devices';
 
 const { forgetDevice, forgetAllDevices } = permissionActions;
 const { detach } = deviceActions;
