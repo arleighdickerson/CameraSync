@@ -12,6 +12,7 @@
     "eslint-utils": "^1.4.1",
     "immutable": "^4.0.0-rc.12",
     "injection-js": "^2.2.2",
+    "inversify": "^5.0.1",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-elements": "^1.1.0",
@@ -31,6 +32,7 @@
     "@babel/generator": "^7.6.0",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.6.0",
+    "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/runtime": "^7.5.5",
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/jest": "^24.0.17",
@@ -40,7 +42,7 @@
     "@types/react-redux": "^7.1.1",
     "@types/react-test-renderer": "^16.9.0",
     "@types/redux-form": "^8.1.4",
-    "babel-jest": "^24.8.0",
+    "babel-jest": "^24.9.0",
     "eslint": "^6.1.0",
     "jest": "^24.8.0",
     "jetifier": "^1.6.4",
@@ -50,6 +52,7 @@
     "react-test-renderer": "16.8.6",
     "remote-redux-devtools": "^0.5.16",
     "remotedev-server": "^0.3.1",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   }
 }

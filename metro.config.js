@@ -15,4 +15,9 @@ module.exports = {
       },
     }),
   },
+  serializer: {
+    getModulesRunBeforeMainModule: (entryFilePath) => ([
+      'core-js/es7/reflect',
+    ]),
+  },
 };

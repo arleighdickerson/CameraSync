@@ -2,7 +2,7 @@ module.exports = {
   preset:               'react-native',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   transform:            {
-    '^.+\\.[jt]sx?$': '<rootDir>/jest/preprocessor.js',
+    '^.+\\.[jt]sx?$': 'ts-jest',
   },
   setupFiles: [
     require.resolve('react-native-gesture-handler/jestSetup'),
@@ -11,4 +11,9 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?react-native|react-navigation|@react-navigation|react-navigation-redux-helpers)',
   ],
+  globals: {
+    'ts-jest': {
+      babelConfig: 'babel.test.json',
+    },
+  },
 };

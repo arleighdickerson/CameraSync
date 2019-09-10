@@ -1,4 +1,3 @@
-import 'core-js/es7/reflect';
 import { ReflectiveInjector, Injectable } from 'injection-js';
 
 class Http {

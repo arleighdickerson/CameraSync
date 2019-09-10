@@ -1,0 +1,25 @@
+{
+  "presets": [
+    "module:metro-react-native-babel-preset"
+  ],
+  "plugins": [
+    [
+      "@babel/proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    [
+      "@babel/proposal-class-properties",
+      {
+        "loose": true
+      }
+    ],
+    [
+      "@babel/transform-runtime",
+      {
+        "regenerator": false
+      }
+    ]
+  ]
+}

@@ -1,3 +1,4 @@
+import 'core-js/es7/reflect';
 import React from 'react';
 import { connect, Provider } from 'react-redux';
 
