@@ -9,4 +9,3 @@ it('should be able to resolve a device instance', () => {
 
   expect(source).toBeInstanceOf(MockDeviceSource);
 });
-

@@ -27,6 +27,7 @@
     "redux-form": "^8.2.5",
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.5",
+    "saga-duck": "^3.2.2",
     "tslib": "^1.10.0",
     "typesafe-actions": "^4.4.2"
   },

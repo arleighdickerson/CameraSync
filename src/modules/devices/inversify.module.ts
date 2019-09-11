@@ -1,13 +1,13 @@
 import { TYPES } from './';
 import { TokenContainerModule } from 'inversify-token';
 import { interfaces } from 'inversify';
-import { env } from 'src/util';
+import * as env from 'src/util/env';
 import { mockDeviceSourceFactory } from './sources/mockDeviceSourceFactory';
 import { nativeDeviceSourceFactory } from './sources/nativeDeviceSourceFactory';
 
 // @see https://github.com/mscharley/inversify-token#usage
 
-export const devicesContainerModule = new TokenContainerModule((bindToken) => {
+export default new TokenContainerModule((bindToken) => {
   const boundToken = bindToken(TYPES.DeviceSource);
 
   if (env.isJest) {

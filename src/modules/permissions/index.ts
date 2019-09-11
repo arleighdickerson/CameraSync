@@ -1,5 +1,6 @@
 import * as typesafe from 'typesafe-actions';
 import * as redux from 'redux';
+import * as TYPES from './sources/types';
 
 export enum actionTypes {
     REQUEST_STORAGE = 'permissions/REQUEST_STORAGE',
@@ -86,5 +87,5 @@ const reducer: redux.Reducer = (state: PermissionsState = initialState, action: 
     return state;
   }
 };
-
+export { TYPES };
 export default reducer;

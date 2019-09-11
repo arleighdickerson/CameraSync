@@ -1,5 +1,5 @@
 import { Store } from 'redux';
-import { env } from 'src/util';
+import * as env from 'src/util/env';
 
 
 export default (store: Store) => {
