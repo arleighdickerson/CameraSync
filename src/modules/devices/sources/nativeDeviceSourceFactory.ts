@@ -6,7 +6,7 @@ const createSource = () => {
   return new DeviceSourceWrapper(Devices);
 };
 
-function createFactory(): () => DeviceSource {
+function createSingletonFactory(): () => DeviceSource {
   let instance: DeviceSource | null = null;
   return () => {
     if (instance === null) {
@@ -16,4 +16,4 @@ function createFactory(): () => DeviceSource {
   };
 }
 
-export const nativeDeviceSourceFactory = createFactory();
+export const nativeDeviceSourceFactory = createSingletonFactory();
