@@ -11,34 +11,66 @@ import {
 } from 'react-navigation-redux-helpers';
 
 import routes from './routes';
-import createStore from './createStore';
+import createDuckRuntime from './createDuckRuntime';
 import registerHandlers from './registerHandlers';
 import readyCallback from './readyCallback';
-import { forceContainerInit } from './ioc';
-
-forceContainerInit();
+import { reducer as formReducer } from 'redux-form';
+import {
+  compose,
+  applyMiddleware,
+  StoreEnhancer,
+  Middleware,
+} from 'redux';
 
 const AppNavigator = createStackNavigator(routes);
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
 
-const store = createStore({
-  reducers: {
-    nav: createNavigationReducer(AppNavigator),
-  },
-  middleware: [
-    createReactNavigationReduxMiddleware(mapStateToProps),
+// reducers that do not belong to any ducks
+const reducers = {
+  form: formReducer,
+  nav:  createNavigationReducer(AppNavigator),
+};
+
+// user-defined redux store middleware
+const middlewares: Array<Middleware> = [
+  createReactNavigationReduxMiddleware(mapStateToProps),
+];
+
+// user-defined redux store enhancers
+const enhancers: Array<StoreEnhancer> = [];
+
+const createRootEnhancer = () => (
+  __DEV__ // dev tools will only be hooked up if we're in dev mode
+    ? require('remote-redux-devtools').composeWithDevTools({
+      realtime: true,
+      port:     8000,
+    })
+    : compose
+)(
+  applyMiddleware(...middlewares),
+  ...enhancers
+);
+
+const duckRuntime = createDuckRuntime({
+  reducers,
+  // middlewares is empty because our middlewares are composed directly onto the "root enhancer"
+  middlewares: [],
+  // as are the rest of our enhancers (if are defined)
+  enhancers:   [
+    // this is the "root enhancer"
+    createRootEnhancer(),
   ],
 });
 
-registerHandlers(store);
-readyCallback(store);
+registerHandlers(duckRuntime.store);
+readyCallback(duckRuntime.store);
 
 const App = createReduxContainer(AppNavigator);
 const AppWithNavigationState = connect(mapStateToProps)(App);
 
 export default () => (
-  <Provider store={store}>
+  <Provider store={duckRuntime.store}>
     <AppWithNavigationState/>
   </Provider>
 );

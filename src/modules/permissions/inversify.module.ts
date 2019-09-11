@@ -1,4 +1,4 @@
-import { TYPES } from './index';
+import * as TYPES from './sources/types';
 import { TokenContainerModule } from 'inversify-token';
 import { interfaces } from 'inversify';
 import * as env from 'src/util/env';

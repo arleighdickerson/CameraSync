@@ -1,17 +1,15 @@
 import {
   ComposableDuck,
-  Duck,
   BaseDuck,
   DuckRuntime,
   DuckOptions, DuckRuntimeOptions,
 } from 'saga-duck';
-import { DeviceDuck } from './modules/devices/duck';
-import { PermissionDuck } from './modules/permissions/duck';
+import { DeviceDuck } from 'src/modules/devices/duck';
+import { PermissionDuck } from 'src/modules/permissions/duck';
 import {
   Reducer,
   StoreEnhancer,
   Middleware,
-  Store,
 } from 'redux';
 import { createGhostObject } from 'src/util/ghostObject';
 
