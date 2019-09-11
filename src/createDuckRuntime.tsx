@@ -36,6 +36,19 @@ const createInstance = ({ reducers, middlewares = [], enhancers = [] }: StoreCon
   };
 
   class RootDuck extends ComposableDuck {
+    get rawDucks() {
+      const deviceKey = 'devices';
+      const permissionKey = 'permissions';
+
+      const deviceDuck = new DeviceDuck(this.getSubDuckOptions(deviceKey));
+      const permissionDuck = new PermissionDuck(this.getSubDuckOptions(permissionKey), deviceDuck);
+
+      return {
+        [deviceKey]:     deviceDuck,
+        [permissionKey]: permissionDuck,
+      };
+    }
+
     get quickDucks() {
       const ducks = {};
 
@@ -44,11 +57,7 @@ const createInstance = ({ reducers, middlewares = [], enhancers = [] }: StoreCon
         ducks[key] = createDuckForReducer(reducer);
       });
 
-      return {
-        ...ducks,
-        devices:     DeviceDuck,
-        permissions: PermissionDuck,
-      };
+      return ducks;
     }
   }
 

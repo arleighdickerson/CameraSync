@@ -1,32 +1,33 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { ActionType } from 'typesafe-actions';
-import * as permissionActions from '..';
-import * as deviceActions from '../../devices';
+import { PermissionDuck } from '../duck';
 // import * as deviceActions from 'src/modules/devices';
 
-const { forgetDevice, forgetAllDevices } = permissionActions;
-const { detach } = deviceActions;
-const { DETACH_DEVICE, DETACH_ALL_DEVICES } = deviceActions.actionTypes;
 
-function* forgetDeviceAuthorization(action: ActionType<typeof detach>) {
-  yield put(forgetDevice(action.payload.deviceName));
-}
+export default function createSaga(duck: PermissionDuck) {
 
-function* watchForDetachedDevice() {
-  yield takeEvery(DETACH_DEVICE, forgetDeviceAuthorization);
-}
+  const { forgetDevice, forgetAllDevices } = duck.creators;
+  const { DETACH_DEVICE, DETACH_ALL_DEVICES } = duck.deviceDuck.types;
 
-function* forgetAllDeviceAuthorizations() {
-  yield put(forgetAllDevices());
-}
+  function* forgetDeviceAuthorization(action: any) {
+    yield put(forgetDevice(action.payload.deviceName));
+  }
 
-function* watchForAllDevicesDetached() {
-  yield takeEvery(DETACH_ALL_DEVICES, forgetAllDeviceAuthorizations);
-}
+  function* watchForDetachedDevice() {
+    yield takeEvery(DETACH_DEVICE, forgetDeviceAuthorization);
+  }
 
-export default function* forgetDevicesOnDisconnect() {
-  yield all([
-    fork(watchForDetachedDevice),
-    fork(watchForAllDevicesDetached),
-  ]);
+  function* forgetAllDeviceAuthorizations() {
+    yield put(forgetAllDevices());
+  }
+
+  function* watchForAllDevicesDetached() {
+    yield takeEvery(DETACH_ALL_DEVICES, forgetAllDeviceAuthorizations);
+  }
+
+  return function* forgetDevicesOnDisconnect() {
+    yield all([
+      fork(watchForDetachedDevice),
+      fork(watchForAllDevicesDetached),
+    ]);
+  };
 }

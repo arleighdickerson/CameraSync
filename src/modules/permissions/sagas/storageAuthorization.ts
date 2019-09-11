@@ -1,24 +1,24 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { NativeModules } from 'react-native';
-import * as permissionActions from '..';
+import { PermissionDuck } from '../duck';
 
-const { Permissions } = NativeModules;
-const { REQUEST_STORAGE } = permissionActions.actionTypes;
+export default function createSaga(duck: PermissionDuck) {
+  const { storageDenied, storageGranted } = duck.creators;
+  const { REQUEST_STORAGE } = duck.types;
+  const source = duck.permissionSource;
 
-const { storageDenied, storageGranted } = permissionActions;
+  function* requestStorageAuthorization() {
+    const wasGranted = yield source.authorizeStorage();
+    const createAction = wasGranted ? storageGranted : storageDenied;
+    yield put(createAction());
+  }
 
-function* requestStorageAuthorization() {
-  const wasGranted = yield Permissions.authorizeStorage();
-  const createAction = wasGranted ? storageGranted : storageDenied;
-  yield put(createAction());
-}
+  function* watchStorageRequests() {
+    yield takeEvery(REQUEST_STORAGE, requestStorageAuthorization);
+  }
 
-function* watchStorageRequests() {
-  yield takeEvery(REQUEST_STORAGE, requestStorageAuthorization);
-}
-
-export default function* storageAuthorization() {
-  yield all([
-    fork(watchStorageRequests),
-  ]);
+  return function* storageAuthorization() {
+    yield all([
+      fork(watchStorageRequests),
+    ]);
+  };
 }

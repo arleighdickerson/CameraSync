@@ -1,12 +1,12 @@
-import { Duck, DuckOptions } from 'saga-duck';
+import { Duck } from 'saga-duck';
 import * as TYPES from './sources/types';
 import { DeviceList, default as models } from './models';
 import * as redux from 'redux';
 import { injectable } from 'inversify';
 import { DeviceSource } from './sources/DeviceSource';
 import { container } from 'src/ioc';
-import { all, fork, put, takeEvery } from 'redux-saga/effects';
 import getDecorators from 'inversify-inject-decorators';
+import deviceSaga from './sagas';
 
 const { lazyInject } = getDecorators(container);
 
@@ -113,28 +113,6 @@ export class DeviceDuck extends Duck {
 
     * saga() {
       yield* super.saga();
-
-      // @see https://github.com/cyrilluce/saga-duck#single-duck
-
-      const { deviceSource, types, creators } = this;
-
-      function* fetchDevices() {
-        const deviceList = yield deviceSource.fetchAll();
-        yield put(creators.attachAll(deviceList));
-      }
-
-      function* watchDeviceListInit() {
-        yield takeEvery(types.INIT_DEVICE_LIST, fetchDevices);
-      }
-
-      function* initializeDevices() {
-        yield all([
-          fork(watchDeviceListInit),
-        ]);
-      }
-
-      yield all([
-        initializeDevices(),
-      ]);
+      yield deviceSaga(this);
     }
 }

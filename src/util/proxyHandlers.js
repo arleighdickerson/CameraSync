@@ -406,7 +406,7 @@ ForwardingHandler.prototype.set = function set(target, name, value, receiver) {
 // VirtualHandler
 // ==========================================================================
 function abstract(name) {
-  return function invoke(...args) { // eslint-disable-line no-unused-vars
+  return function invoke(...args) {
     throw new TypeError(`${name} not implemented`);
   };
 }

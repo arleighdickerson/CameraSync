@@ -1,24 +1,19 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import * as deviceActions from '..';
+import { DeviceDuck } from '../duck';
 
-const { INIT_DEVICE_LIST } = deviceActions.actionTypes;
+export default function createSaga(duck: DeviceDuck) {
+  function* fetchDevices() {
+    const deviceList = yield duck.deviceSource.fetchAll();
+    yield put(duck.creators.attachAll(deviceList));
+  }
 
-import { NativeModules } from 'react-native';
+  function* watchDeviceListInit() {
+    yield takeEvery(duck.types.INIT_DEVICE_LIST, fetchDevices);
+  }
 
-const { Devices } = NativeModules;
-
-
-function* fetchDevices() {
-  const deviceList = yield Devices.fetchAll();
-  yield put(deviceActions.attachAll(deviceList));
-}
-
-function* watchDeviceListInit() {
-  yield takeEvery(INIT_DEVICE_LIST, fetchDevices);
-}
-
-export default function* initializeDevices() {
-  yield all([
-    fork(watchDeviceListInit),
-  ]);
+  return function* initializeDevices() {
+    yield all([
+      fork(watchDeviceListInit),
+    ]);
+  };
 }
