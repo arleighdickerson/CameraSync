@@ -4,7 +4,7 @@ import {
   BaseDuck,
   DuckRuntime,
   DuckOptions, DuckRuntimeOptions,
-} from 'saga-duck';
+} from 'src/lib/duck';
 import { DeviceDuck } from 'src/modules/devices/duck';
 import { PermissionDuck } from 'src/modules/permissions/duck';
 import {

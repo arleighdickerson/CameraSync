@@ -7342,11 +7342,6 @@ redux-persist@^5.10.0:
   resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-5.10.0.tgz#5d8d802c5571e55924efc1c3a9b23575283be62b"
   integrity sha512-sSJAzNq7zka3qVHKce1hbvqf0Vf5DuTVm7dr4GtsqQVOexnrvbV47RWFiPxQ8fscnyiuWyD2O92DOxPl0tGCRg==
 
-redux-saga-catch@0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/redux-saga-catch/-/redux-saga-catch-0.0.9.tgz#cc7a3c304b2a6ba8a913f2c641f60e22f1238d0f"
-  integrity sha512-FnLlS/H4+xbgd7H32784789bpyA2j57B9eBzT9SLIadhK0MJ36zHUQlIKBlqrsXemFAxSLHVE3WXLChZzb4M0g==
-
 redux-saga@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-1.0.5.tgz#03317261bc5fa7ee2ecb778f4e4848f573557bbb"
@@ -7703,13 +7698,6 @@ safe-regex@^1.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
-
-saga-duck@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/saga-duck/-/saga-duck-3.2.2.tgz#2ef5f9cd6f2e9b98397a80cecf5390b6a0dac853"
-  integrity sha512-Hrghf8EPzE5hoJavRFIlud2GecViKAAQlnUW/SxTOssyTvlpea4lmcFq75H0jR5C9ltJnDD7/OxZoRIV5mrjzA==
-  dependencies:
-    redux-saga-catch "0.0.9"
 
 sane@^4.0.3:
   version "4.1.0"

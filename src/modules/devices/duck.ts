@@ -1,4 +1,4 @@
-import { Duck } from 'saga-duck';
+import { Duck } from 'src/lib/duck';
 import * as TYPES from './sources/types';
 import { DeviceList, default as models } from './models';
 import * as redux from 'redux';
@@ -29,7 +29,11 @@ const initialState: DeviceState = {};
 export class DeviceDuck extends Duck {
     @lazyInject(TYPES.DeviceSource.identifier)
     // @ts-ignore
-    public deviceSource: DeviceSource;
+    private _deviceSource: DeviceSource;
+
+    public get deviceSource() {
+      return this._deviceSource;
+    }
 
     get actionTypePrefix() {
       return 'devices';
