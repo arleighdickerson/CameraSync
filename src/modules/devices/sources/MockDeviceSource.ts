@@ -1,6 +1,8 @@
 import { DeviceSource } from './DeviceSource';
 import { DeviceList } from '../models';
+import { injectable } from 'inversify';
 
+@injectable()
 export class MockDeviceSource implements DeviceSource {
     EVENT_DEVICE_ATTACHED: string = 'EVENT_DEVICE_ATTACHED';
     EVENT_DEVICE_DETACHED: string = '';

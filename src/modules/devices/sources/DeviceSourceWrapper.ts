@@ -1,13 +1,7 @@
-import { DeviceList } from '../models';
+import { DeviceSource } from './DeviceSource';
+import { injectable } from 'inversify';
 
-export interface DeviceSource {
-    readonly EVENT_DEVICE_ATTACHED: string;
-    readonly EVENT_DEVICE_DETACHED: string;
-    readonly E_DEVICE_MISSING: string;
-    readonly E_NO_DEVICES_CONNECTED: string;
-    fetchAll: () => Promise<DeviceList>;
-}
-
+@injectable()
 export abstract class DeviceSourceWrapper implements DeviceSource {
     abstract get delegate(): DeviceSource;
 

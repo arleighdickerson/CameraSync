@@ -1,5 +1,7 @@
 import { PermissionSource } from './PermissionSource';
+import { injectable } from 'inversify';
 
+@injectable()
 export class MockPermissionSource implements PermissionSource {
   hasStorage() {
     return Promise.resolve(false);

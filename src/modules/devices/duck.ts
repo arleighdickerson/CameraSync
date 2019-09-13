@@ -1,5 +1,5 @@
-import { Duck } from 'src/lib/duck';
-import * as TYPES from './sources/types';
+import { Duck } from 'lib/duck';
+import * as TYPES from 'src/types';
 import { DeviceList, default as models } from './models';
 import * as redux from 'redux';
 import { injectable } from 'inversify';
