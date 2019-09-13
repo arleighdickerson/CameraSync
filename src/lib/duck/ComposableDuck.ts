@@ -2,6 +2,7 @@ import { DuckOptions } from './index';
 import Duck, { COMBINE_REDUCERS } from './Duck';
 import { combineReducers } from 'redux';
 import { fork } from 'redux-saga/effects';
+// @ts-ignore
 import { parallel } from 'redux-saga-catch';
 
 type DuckType<T extends Duck> = { new (options?: DuckOptions): T };
@@ -28,6 +29,7 @@ export default class ComposableDuck extends Duck {
     return {
       namespace,
       route:    parentRoute ? `${parentRoute}/${route}` : route,
+      // @ts-ignore
       selector: state => parentSelector(state)[route],
     };
   }
@@ -104,11 +106,13 @@ export default class ComposableDuck extends Duck {
   get rawDucks() {
     return {};
   }
+  // @ts-ignore
   get reducer(): COMBINE_REDUCERS<
     this['reducers'] & DUCKS_REDUCERS<this['ducks']>
     > {
     const ducksReducers: any = {};
     for (const key of Object.keys(this.ducks)) {
+      // @ts-ignore
       ducksReducers[key] = this.ducks[key].reducer;
     }
     return combineReducers({
@@ -120,6 +124,7 @@ export default class ComposableDuck extends Duck {
     const { ducks } = this;
     let sagas: any[] = [];
     for (const key of Object.keys(ducks)) {
+      // @ts-ignore
       const duck = ducks[key];
       sagas = sagas.concat(duck.sagas);
     }

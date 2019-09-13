@@ -9,9 +9,10 @@ import createSagaMiddleware, {
   Task,
 } from 'redux-saga';
 import { connect } from 'react-redux';
+// @ts-ignore
 import { parallel } from 'redux-saga-catch';
 import Duck from './Duck';
-import { DuckRuntimeOptions, DuckCmpProps } from './index';
+import { DuckRuntimeOptions } from './index';
 
 /** Fire when React Root Component mounted */
 export const INIT = '@@duck-runtime-init';
@@ -22,6 +23,7 @@ export default class DuckRuntime<TState = any> {
     duck: Duck;
     private middlewares: any[];
     private enhancers: any[];
+    // @ts-ignore
     private sagaMiddleware: SagaMiddleware<any>;
     public store: any;
     private _tasks: Task[] = [];
@@ -31,8 +33,13 @@ export default class DuckRuntime<TState = any> {
      * @param {*} duck
      * @param middlewares
      */
+    // @ts-ignore
     constructor(duck, options?: DuckRuntimeOptions)
+    // @ts-ignore
+    // eslint-disable-next-line no-dupe-class-members
     constructor(duck, ...middlewares: any[])
+    // @ts-ignore
+    // eslint-disable-next-line no-dupe-class-members
     constructor(duck, ...middlewares: any[]) {
       this.duck = duck;
       let options: DuckRuntimeOptions;
@@ -97,7 +104,7 @@ export default class DuckRuntime<TState = any> {
      */
     connect() {
       const duck = this.duck;
-      return function decorate(Container) {
+      return function decorate(Container: any) {
         return connect(
           state => ({ store: state }),
           dispatch => ({
@@ -116,7 +123,7 @@ export default class DuckRuntime<TState = any> {
     root(autoDestroy = true) {
       const duckRuntime = this;
       const store = this.store;
-      return function decorate(Container): any {
+      return function decorate(Container: { displayName: any; name: any; }): any {
         class AttachedContainer extends Component {
           componentDidMount() {
             store.dispatch({ type: INIT });
@@ -136,6 +143,7 @@ export default class DuckRuntime<TState = any> {
           }
 
           render() {
+            // @ts-ignore
             return createElement(Container, (this as any).props);
           }
         }
@@ -157,7 +165,7 @@ export default class DuckRuntime<TState = any> {
     connectRoot() {
       const decorateRoot = this.root();
       const decorateConnect = this.connect();
-      return function decorate(Container) {
+      return function decorate(Container: { displayName: any; name: any; }) {
         return decorateConnect(decorateRoot(Container));
       };
     }

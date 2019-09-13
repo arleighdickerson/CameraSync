@@ -6,6 +6,7 @@ import BaseDuck from './BaseDuck';
 import { combineReducers } from 'redux';
 export type COMBINE_REDUCERS<T extends { [key: string]: () => any }> = (
   state: STATE_OF_REDUCERS<T>,
+  // @ts-ignore
   action
 ) => STATE_OF_REDUCERS<T>;
 type STATE_OF_REDUCERS<REDUCERS extends { [key: string]: () => any }> = {

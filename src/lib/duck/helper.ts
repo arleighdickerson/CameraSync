@@ -53,6 +53,7 @@ export function memorize<T>(
 ): (reactInstanceOrProps: any) => T {
   const cacheKey = '_sagaDuckMemorized';
   const idKey = '_sagaDuckUniqId';
+  // @ts-ignore
   const fnId = fn[idKey] || (fn[idKey] = generateId('MEMORIZE-FN'));
   return function memorizedFn(duckComponent) {
     let cacheHost;
