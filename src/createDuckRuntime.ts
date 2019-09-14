@@ -7,7 +7,7 @@ import {
   StoreEnhancer,
   Middleware,
 } from 'redux';
-import { createGhostObject } from 'src/util/ghostObject';
+// import { createGhostObject } from 'src/util/ghostObject';
 import { RootDuck } from './modules/RootDuck';
 
 export interface StoreConfiguration {

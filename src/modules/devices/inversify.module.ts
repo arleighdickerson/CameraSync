@@ -1,19 +1,13 @@
 import * as TYPES from 'src/types';
 import { TokenContainerModule } from 'inversify-token';
 import { NativeDeviceSource } from './sources/NativeDeviceSource';
-import { DeviceDuck } from './duck';
+import { MockDeviceSource } from './sources/MockDeviceSource';
+import { isTest } from 'src/util/env';
 
 // @see https://github.com/mscharley/inversify-token#usage
 
 export default new TokenContainerModule((bindToken) => {
   bindToken(TYPES.DeviceSource)
-    .to(NativeDeviceSource)
+    .to(isTest ? MockDeviceSource : NativeDeviceSource)
     .inSingletonScope();
-
-  /*
-  bindToken(TYPES.Duck)
-    .to(DeviceDuck)
-    .inSingletonScope()
-    .whenTargetNamed('devices');
-  */
 });

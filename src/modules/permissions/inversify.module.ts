@@ -1,21 +1,13 @@
-// import * as env from 'src/util/env';
-import * as TYPES from 'src/types';
-// import MockPermissionSource from './sources/MockPermissionSource';
-import { NativePermissionSource } from './sources/NativePermissionSource';
 import { TokenContainerModule } from 'inversify-token';
-import { PermissionDuck } from './duck';
+import * as TYPES from 'src/types';
+import { isTest } from 'src/util/env';
+import { NativePermissionSource } from './sources/NativePermissionSource';
+import { MockPermissionSource } from './sources/MockPermissionSource';
 
 
 // @see https://github.com/mscharley/inversify-token#usage
 export default new TokenContainerModule((bindToken) => {
   bindToken(TYPES.PermissionSource)
-    .to(NativePermissionSource)
+    .to(isTest ? MockPermissionSource : NativePermissionSource)
     .inSingletonScope();
-
-  /*
-    bindToken(TYPES.Duck)
-      .to(PermissionDuck)
-      .inSingletonScope()
-      .whenTargetNamed('permissions');
-     */
 });
