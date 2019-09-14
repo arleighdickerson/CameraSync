@@ -4,26 +4,17 @@ import { generateId, memorize } from './helper';
  * saga-duck TS3.0+
  * @author cluezhang
  */
-type GLOBAL_SELECTOR<T> = T extends (state: any, ...rest: infer U) => infer K
-    ? (globalState: any, ...rest: U) => K
-    : never;
-type GLOBAL_SELECTORS<T> = { [key in keyof T]: GLOBAL_SELECTOR<T[key]> };
-import { DuckOptions } from './index';
 
-const defaultDuckOptions: DuckOptions = {
-  namespace: 'global',
-  selector(a) {
-    return a;
-  },
-  route: '',
-};
-export type TYPES<T> = { readonly [P in keyof T]: string };
+import { DuckOptions, defaultDuckOptions } from './index';
+import { TYPES, GLOBAL_SELECTORS } from './interfaces';
+import { injectable } from 'inversify';
 
 /**
  * 支持reducer的Duck
  *
  * Duck support reducer(not reducers)
  */
+@injectable()
 export default abstract class BaseDuck {
     protected id: string = generateId();
 

@@ -10,7 +10,7 @@ import createSagaMiddleware, {
 } from 'redux-saga';
 import { connect } from 'react-redux';
 // @ts-ignore
-import { parallel } from 'redux-saga-catch';
+import { parallel } from './sagaCatch';
 import Duck from './Duck';
 import { DuckRuntimeOptions } from './index';
 

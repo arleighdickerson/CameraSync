@@ -4,6 +4,7 @@
  */
 import BaseDuck from './BaseDuck';
 import { combineReducers } from 'redux';
+import { injectable } from 'inversify';
 export type COMBINE_REDUCERS<T extends { [key: string]: () => any }> = (
   state: STATE_OF_REDUCERS<T>,
   // @ts-ignore
@@ -18,6 +19,7 @@ type STATE_OF_REDUCERS<REDUCERS extends { [key: string]: () => any }> = {
  *
  * Duck support `reducers` ( If you need single `reducer`, please use `BaseDuck`)
  */
+@injectable()
 export default class Duck extends BaseDuck {
   // ----------------------- reducers -----------------------
   /**
@@ -48,4 +50,3 @@ get reducers(){
     return combineReducers(this.reducers as any);
   }
 }
-

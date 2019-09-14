@@ -2,14 +2,18 @@ import { Container } from 'inversify';
 import emitterModule from 'src/modules/emitter/inversify.module';
 import devicesModule from 'src/modules/devices/inversify.module';
 import permissionsModule from 'src/modules/permissions/inversify.module';
+import rootModule from 'src/modules/inversify.module';
 import { createGhostObject } from '../util/ghostObject';
 
 const createContainer = () => {
   const container = new Container();
 
-  container.load(emitterModule);
-  container.load(devicesModule);
-  container.load(permissionsModule);
+  container.load(
+    emitterModule,
+    devicesModule,
+    permissionsModule,
+    rootModule,
+  );
 
   return container;
 };

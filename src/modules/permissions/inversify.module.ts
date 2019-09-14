@@ -12,8 +12,10 @@ export default new TokenContainerModule((bindToken) => {
     .to(NativePermissionSource)
     .inSingletonScope();
 
-  bindToken(TYPES.Duck)
-    .to(PermissionDuck)
-    .inSingletonScope()
-    .whenTargetNamed('permissions');
+  /*
+    bindToken(TYPES.Duck)
+      .to(PermissionDuck)
+      .inSingletonScope()
+      .whenTargetNamed('permissions');
+     */
 });

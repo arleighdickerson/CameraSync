@@ -36,7 +36,7 @@ export class DeviceDuck extends Duck {
     }
 
     get actionTypePrefix() {
-      return 'devices';
+      return 'devices/';
     }
 
     get quickTypes() {

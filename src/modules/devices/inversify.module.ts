@@ -10,8 +10,10 @@ export default new TokenContainerModule((bindToken) => {
     .to(NativeDeviceSource)
     .inSingletonScope();
 
+  /*
   bindToken(TYPES.Duck)
     .to(DeviceDuck)
     .inSingletonScope()
     .whenTargetNamed('devices');
+  */
 });

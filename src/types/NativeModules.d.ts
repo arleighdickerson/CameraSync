@@ -1,5 +1,5 @@
 import { DeviceSource } from 'src/modules/devices/sources/DeviceSource';
-import PermissionSource from 'src/modules/permissions/sources/PermissionSource';
+import { PermissionSource } from 'src/modules/permissions/sources/PermissionSource';
 
 declare module 'react-native';
 

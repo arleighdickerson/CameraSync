@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, Provider } from 'react-redux';
-
+import * as TYPES from './types';
+import { container } from './ioc';
 import {
   createStackNavigator,
 } from 'react-navigation';
@@ -12,8 +13,6 @@ import {
 
 import routes from './routes';
 import createDuckRuntime from './createDuckRuntime';
-import registerHandlers from './registerHandlers';
-import readyCallback from './readyCallback';
 import { reducer as formReducer } from 'redux-form';
 import {
   compose,
@@ -21,6 +20,9 @@ import {
   StoreEnhancer,
   Middleware,
 } from 'redux';
+
+import registerHandlers from './registerHandlers';
+import readyCallback from './readyCallback';
 
 const AppNavigator = createStackNavigator(routes);
 
@@ -62,6 +64,8 @@ const duckRuntime = createDuckRuntime({
     createRootEnhancer(),
   ],
 });
+container.bind(TYPES.Store.identifier).toConstantValue(duckRuntime.store);
+container.bind(TYPES.RootDuck.identifier).toConstantValue(duckRuntime.duck);
 
 registerHandlers(duckRuntime.store);
 readyCallback(duckRuntime.store);

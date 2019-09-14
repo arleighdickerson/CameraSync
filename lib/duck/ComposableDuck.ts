@@ -1,17 +1,19 @@
 import { DuckOptions } from './index';
-import Duck, { COMBINE_REDUCERS } from './Duck';
+import SingleDuck, { COMBINE_REDUCERS } from './Duck';
 import { combineReducers } from 'redux';
 import { fork } from 'redux-saga/effects';
 // @ts-ignore
-import { parallel } from 'redux-saga-catch';
+import { parallel } from './sagaCatch';
 
-type DuckType<T extends Duck> = { new (options?: DuckOptions): T };
-type DUCKS_REDUCERS<T extends Record<string, Duck>> = {
-  [key in keyof T]: T[key]['reducer']
-};
-type DUCKS<T extends Record<string, DuckType<Duck>>> = {
-  [key in keyof T]: InstanceType<T[key]>
-};
+import {
+  DuckType,
+  DUCKS_REDUCERS,
+  DUCKS,
+  ComposableDuck as CompositeDuck,
+  Duck,
+} from './interfaces';
+import { injectable } from 'inversify';
+
 /**
  * 支持组合多个子Duck（`ducks`）的Duck，同时它自身也支持`reducers`，
  * 但需注意相同`route`下，`ducks`会覆盖`reducers`的状态
@@ -19,10 +21,12 @@ type DUCKS<T extends Record<string, DuckType<Duck>>> = {
  * Duck support compose multi sub duck(`ducks`), also support `reducers`,
  * but reminder with same `route`, `ducks` will override `reducers`'s state.
  */
-export default class ComposableDuck extends Duck {
+@injectable()
+export default class ComposableDuck extends SingleDuck implements CompositeDuck {
   protected get _cacheGetters() {
     return [...super._cacheGetters, 'ducks'];
   }
+
   protected getSubDuckOptions(route: string): DuckOptions {
     const { namespace, route: parentRoute } = this.options;
     const parentSelector = this.selector;
@@ -33,11 +37,12 @@ export default class ComposableDuck extends Duck {
       selector: state => parentSelector(state)[route],
     };
   }
+
   /**
-   * ducks生成工具方法
-   * this.makeDucks({foo: Foo}) => {foo: new Foo(...)}
-   * @param ducks
-   */
+     * ducks生成工具方法
+     * this.makeDucks({foo: Foo}) => {foo: new Foo(...)}
+     * @param ducks
+     */
   protected makeDucks<T extends Record<string, DuckType<Duck>>>(
     ducks: T
   ): DUCKS<T> {
@@ -48,68 +53,70 @@ export default class ComposableDuck extends Duck {
     }
     return map;
   }
+
   /**
-   * **不允许扩展**，请使用`quickDucks`或`rawDucks`来定义
-   *
-   * 获取子ducks
-   *
-   * **Disallow override**, please use `quickDucks` or `rawDucks` to define
-   *
-   * Get sub ducks
-   * @example
-   * ```
-*sagaFoo(){
+     * **不允许扩展**，请使用`quickDucks`或`rawDucks`来定义
+     *
+     * 获取子ducks
+     *
+     * **Disallow override**, please use `quickDucks` or `rawDucks` to define
+     *
+     * Get sub ducks
+     * @example
+     * ```
+     *sagaFoo(){
   const { types, ducks } = this
   yield takeLatest(types.FOO, function*(){
     yield* ducks.foo.sagaFoo()
     yield put(ducks.foo.creators.foo(''))
   })
 }```
-   */
+     */
   get ducks(): DUCKS<this['quickDucks']> & this['rawDucks'] {
     return Object.assign(
       {},
-      this.makeDucks(this.quickDucks) as DUCKS<this['quickDucks']>,
-      this.rawDucks
+            this.makeDucks(this.quickDucks) as DUCKS<this['quickDucks']>,
+            this.rawDucks
     );
   }
+
   /**
-   * 根据Duck类map快速生成子ducks
-   *
-   * Quick declare sub ducks by Duck Class map.
-   * @example
-   * ```
-  get quickDucks() {
+     * 根据Duck类map快速生成子ducks
+     *
+     * Quick declare sub ducks by Duck Class map.
+     * @example
+     * ```
+     get quickDucks() {
     return {
       ...super.quickDucks,
       foo: FooDuck
     };
   }```
-   */
+     */
   get quickDucks() {
     return {};
   }
+
   /**
-   * 手工生成子duck，它会直接合并到ducks属性上，请注意尽量不要修改内置的duck options
-   *
-   * Manually declare sub ducks, it will directly merge to `ducks` property,
-   * reminder do not change internal duck options.
-   * @example
-   * ```
-  get rawDucks(){
+     * 手工生成子duck，它会直接合并到ducks属性上，请注意尽量不要修改内置的duck options
+     *
+     * Manually declare sub ducks, it will directly merge to `ducks` property,
+     * reminder do not change internal duck options.
+     * @example
+     * ```
+     get rawDucks(){
       return {
           ...super.rawDucks,
           foo: new FooDuck(this.getSubDuckOptions('foo'))
       }
   }```
-   */
+     */
   get rawDucks() {
     return {};
   }
+
   // @ts-ignore
-  get reducer(): COMBINE_REDUCERS<
-    this['reducers'] & DUCKS_REDUCERS<this['ducks']>
-    > {
+  get reducer(): COMBINE_REDUCERS<this['reducers'] & DUCKS_REDUCERS<this['ducks']>> {
     const ducksReducers: any = {};
     for (const key of Object.keys(this.ducks)) {
       // @ts-ignore
@@ -120,7 +127,8 @@ export default class ComposableDuck extends Duck {
       ...ducksReducers,
     });
   }
-  private *ducksSaga() {
+
+  private* ducksSaga() {
     const { ducks } = this;
     let sagas: any[] = [];
     for (const key of Object.keys(ducks)) {
@@ -130,7 +138,8 @@ export default class ComposableDuck extends Duck {
     }
     yield parallel(sagas);
   }
-  *saga() {
+
+  * saga() {
     yield* super.saga();
     yield fork([this, this.ducksSaga]);
   }
