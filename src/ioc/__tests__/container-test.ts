@@ -1,5 +1,5 @@
 import container from 'src/ioc';
-import { DeviceDuck } from 'src/modules/devices/duck';
+import { DeviceDuck } from 'src/modules/devices';
 import { getToken } from 'inversify-token';
 import * as TYPES from 'src/types';
 import { DeviceSource } from 'src/modules/devices/sources/DeviceSource';

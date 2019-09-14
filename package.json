@@ -9,6 +9,7 @@
     "lint": "eslint --ext .js --ext .ts --ext .d.ts ."
   },
   "dependencies": {
+    "aspect.js": "^0.8.1",
     "events": "^3.0.0",
     "immutable": "^4.0.0-rc.12",
     "inversify": "^5.0.1",

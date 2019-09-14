@@ -7,7 +7,7 @@ import { generateId, memorize } from './helper';
 
 import { DuckOptions, defaultDuckOptions } from './index';
 import { TYPES, GLOBAL_SELECTORS } from './interfaces';
-import { injectable } from 'inversify';
+import { injectable, unmanaged } from 'inversify';
 
 /**
  * 支持reducer的Duck
@@ -18,7 +18,7 @@ import { injectable } from 'inversify';
 export default abstract class BaseDuck {
     protected id: string = generateId();
 
-    constructor(protected options: DuckOptions = defaultDuckOptions) {
+    constructor(@unmanaged() protected options: DuckOptions = defaultDuckOptions) {
       this._makeCacheGetters();
     }
 

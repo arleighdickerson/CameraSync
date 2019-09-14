@@ -9,7 +9,7 @@ export interface DeviceSource {
 }
 
 export abstract class DeviceSourceWrapper implements DeviceSource {
-    abstract get delegate(): DeviceSource;
+    protected abstract get delegate(): DeviceSource;
 
     fetchAll() {
       return this.delegate.fetchAll();

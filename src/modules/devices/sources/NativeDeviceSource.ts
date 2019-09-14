@@ -3,23 +3,19 @@ import { DeviceSource } from './DeviceSource';
 // import assert from 'assert';
 import { injectable } from 'inversify';
 
-const resolveNativeModule = (() => {
-  let nativeModule: DeviceSource | null = null;
-  return (): DeviceSource => {
-    if (nativeModule === null) {
-      const { NativeModules } = require('react-native');
-      // assert(NativeModules, 'react-native.NativeModules apparently not present');
-      const { Devices } = NativeModules;
-      // assert(NativeModules, 'react-native.NativeModules.Devices apparently not present');
-      nativeModule = Devices;
-    }
-    return <DeviceSource>nativeModule;
-  };
-})();
+export const factory = (): DeviceSource => {
+  const { Devices } = require('react-native').NativeModules;
+  if (!Devices) {
+    throw new Error(
+      'NativeModules.Devices not found. Are you sure we\'re running in a native environment?'
+    );
+  }
+  return Devices;
+};
 
 @injectable()
 export class NativeDeviceSource extends DeviceSourceWrapper {
   get delegate() {
-    return resolveNativeModule();
+    return factory();
   }
 }

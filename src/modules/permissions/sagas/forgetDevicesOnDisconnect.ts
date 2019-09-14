@@ -1,5 +1,5 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { PermissionDuck } from '../duck';
+import { PermissionDuck } from 'src/modules/permissions';
 // import * as deviceActions from 'src/modules/devices';
 
 

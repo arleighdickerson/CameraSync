@@ -6,7 +6,7 @@ import { container } from 'src/ioc';
 import { getToken } from 'inversify-token';
 import * as TYPES from 'src/types';
 import { EventEmitter } from 'events';
-import { DeviceDuck } from './duck';
+import { DeviceDuck } from './';
 
 // @todo make this work with duck
 export default (store: Store) => {

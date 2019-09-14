@@ -1,5 +1,5 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { PermissionDuck } from '../duck';
+import { PermissionDuck } from 'src/modules/permissions';
 
 
 export default function createSaga(duck: PermissionDuck) {

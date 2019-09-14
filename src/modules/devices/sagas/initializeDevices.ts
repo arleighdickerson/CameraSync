@@ -1,5 +1,5 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { DeviceDuck } from '../duck';
+import { DeviceDuck } from '../';
 
 export default function createSaga(duck: DeviceDuck) {
   function* fetchDevices() {

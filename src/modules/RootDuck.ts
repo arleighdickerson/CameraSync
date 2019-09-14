@@ -3,8 +3,8 @@ import {
   ComposableDuck,
   DuckOptions,
 } from 'lib/duck';
-import { DeviceDuck } from './devices/duck';
-import { PermissionDuck } from './permissions/duck';
+import { DeviceDuck } from './devices';
+import { PermissionDuck } from './permissions';
 import _ from 'lodash';
 import { Reducer } from 'redux';
 import { injectable } from 'inversify';

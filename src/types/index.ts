@@ -4,8 +4,8 @@ import { PermissionSource } from 'src/modules/permissions/sources/PermissionSour
 import { DeviceSource } from 'src/modules/devices/sources/DeviceSource';
 import { Reducer, Store } from 'redux';
 import { RootDuck } from 'src/modules/RootDuck';
-import { PermissionDuck } from 'src/modules/permissions/duck';
-import { DeviceDuck } from 'src/modules/devices/duck';
+import { PermissionDuck } from 'src/modules/permissions';
+import { DeviceDuck } from 'src/modules/devices';
 import { DuckRuntime } from 'lib/duck';
 
 type Reducers = { [key: string]: Reducer }
