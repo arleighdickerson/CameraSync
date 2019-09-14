@@ -26,7 +26,7 @@ const createInstance = ({ reducers, middlewares = [], enhancers = [] }: StoreCon
 
   return new DuckRuntime(rootDuck, options);
 };
-
+/*
 const createFactory = (storeConfiguration: StoreConfiguration) => {
   let instance: DuckRuntime | null = null;
   return (): DuckRuntime => {
@@ -36,7 +36,7 @@ const createFactory = (storeConfiguration: StoreConfiguration) => {
     return instance;
   };
 };
-
+*/
 export default (storeConfiguration: StoreConfiguration) => {
-  return createGhostObject(createFactory(storeConfiguration));
+  return createInstance(storeConfiguration);
 };

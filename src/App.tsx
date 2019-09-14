@@ -64,6 +64,7 @@ const duckRuntime = createDuckRuntime({
     createRootEnhancer(),
   ],
 });
+
 container.bind(TYPES.Store.identifier).toConstantValue(duckRuntime.store);
 container.bind(TYPES.RootDuck.identifier).toConstantValue(duckRuntime.duck);
 
