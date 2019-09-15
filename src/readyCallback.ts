@@ -2,7 +2,7 @@
 import { Store } from 'redux';
 import * as TYPES from './types';
 import { getToken } from 'inversify-token';
-import { container } from './ioc';
+import { container } from 'src/ioc'
 
 // @todo make this work with duck
 export default (store: Store) => {

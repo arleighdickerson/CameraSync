@@ -4,11 +4,9 @@ import { DeviceList, default as models } from './models';
 import * as redux from 'redux';
 import { injectable } from 'inversify';
 import { DeviceSource } from './sources/DeviceSource';
-import { container } from 'src/ioc';
 import getDecorators from 'inversify-inject-decorators';
 import deviceSaga from './sagas';
-
-const { lazyInject } = getDecorators(container);
+import { container } from 'src/ioc';
 
 interface DeviceInfo extends models.DeviceInfo {
 }
@@ -24,6 +22,8 @@ function cloneDeviceList(deviceList: DeviceList): DeviceList {
 }
 
 const initialState: DeviceState = {};
+
+const { lazyInject } = getDecorators(container);
 
 @injectable()
 export class DeviceDuck extends Duck {

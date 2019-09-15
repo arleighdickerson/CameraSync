@@ -2,7 +2,7 @@ import { Token, TokenType } from 'inversify-token';
 import { EventEmitter as EventSource } from 'events';
 import { PermissionSource } from 'src/modules/permissions/sources/PermissionSource';
 import { DeviceSource } from 'src/modules/devices/sources/DeviceSource';
-import { Reducer, Store } from 'redux';
+import {Middleware, Reducer, Store, StoreEnhancer} from 'redux';
 import { RootDuck } from 'src/modules/RootDuck';
 import { PermissionDuck } from 'src/modules/permissions';
 import { DeviceDuck } from 'src/modules/devices';

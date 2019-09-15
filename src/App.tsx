@@ -1,28 +1,21 @@
 import React from 'react';
 import { connect, Provider } from 'react-redux';
-import * as TYPES from './types';
-import { container } from './ioc';
-import {
-  createStackNavigator,
-} from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
+import { reducer as formReducer } from 'redux-form';
 import {
   createNavigationReducer,
   createReactNavigationReduxMiddleware,
   createReduxContainer,
 } from 'react-navigation-redux-helpers';
 
+import * as TYPES from './types';
+import { container } from './ioc';
 import routes from './routes';
-import createDuckRuntime from './createDuckRuntime';
-import { reducer as formReducer } from 'redux-form';
-import {
-  compose,
-  applyMiddleware,
-  StoreEnhancer,
-  Middleware,
-} from 'redux';
+import { compose, applyMiddleware, StoreEnhancer, Middleware } from 'redux';
 
 import registerHandlers from './registerHandlers';
 import readyCallback from './readyCallback';
+import createDuckRuntime from './createDuckRuntime';
 
 const AppNavigator = createStackNavigator(routes);
 
@@ -56,17 +49,13 @@ const createRootEnhancer = () => (
 
 const duckRuntime = createDuckRuntime({
   reducers,
-  // middlewares is empty because our middlewares are composed directly onto the "root enhancer"
   middlewares: [],
-  // as are the rest of our enhancers (if are defined)
-  enhancers:   [
-    // this is the "root enhancer"
-    createRootEnhancer(),
-  ],
+  enhancers:   [createRootEnhancer()],
 });
 
-container.bind(TYPES.Store.identifier).toConstantValue(duckRuntime.store);
-container.bind(TYPES.RootDuck.identifier).toConstantValue(duckRuntime.duck);
+container.bind(TYPES.DuckRuntime.identifier).toConstantValue(duckRuntime);
+container.bind(TYPES.RootDuck.identifier).toDynamicValue(() => duckRuntime.duck);
+container.bind(TYPES.Store.identifier).toDynamicValue(() => duckRuntime.store);
 
 registerHandlers(duckRuntime.store);
 readyCallback(duckRuntime.store);

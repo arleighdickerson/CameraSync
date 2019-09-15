@@ -1,13 +1,5 @@
-import {
-  DuckRuntime,
-  DuckRuntimeOptions,
-} from 'lib/duck';
-import {
-  Reducer,
-  StoreEnhancer,
-  Middleware,
-} from 'redux';
-// import { createGhostObject } from 'src/util/ghostObject';
+import { DuckRuntime, DuckRuntimeOptions } from 'lib/duck';
+import { Reducer, StoreEnhancer, Middleware } from 'redux';
 import { RootDuck } from './modules/RootDuck';
 
 export interface StoreConfiguration {
@@ -26,17 +18,7 @@ const createInstance = ({ reducers, middlewares = [], enhancers = [] }: StoreCon
 
   return new DuckRuntime(rootDuck, options);
 };
-/*
-const createFactory = (storeConfiguration: StoreConfiguration) => {
-  let instance: DuckRuntime | null = null;
-  return (): DuckRuntime => {
-    if (instance === null) {
-      instance = createInstance(storeConfiguration);
-    }
-    return instance;
-  };
-};
-*/
+
 export default (storeConfiguration: StoreConfiguration) => {
   return createInstance(storeConfiguration);
 };
