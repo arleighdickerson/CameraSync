@@ -1,5 +1,6 @@
 import { DeviceSourceWrapper } from './DeviceSourceWrapper';
 import { DeviceSource } from './DeviceSource';
+import { NativeModules } from 'react-native';
 // import assert from 'assert';
 import { injectable } from 'inversify';
 
@@ -7,7 +8,6 @@ export const resolveNativeModule = (() => {
   let nativeModule: DeviceSource | null = null;
   return (): DeviceSource => {
     if (nativeModule === null) {
-      const { NativeModules } = require('react-native');
       // assert(NativeModules, 'react-native.NativeModules apparently not present');
       const { Devices } = NativeModules;
       // assert(NativeModules, 'react-native.NativeModules.Devices apparently not present');

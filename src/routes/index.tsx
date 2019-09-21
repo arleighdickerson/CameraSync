@@ -1,7 +1,7 @@
 import { NavigationRouteConfigMap } from 'react-navigation';
 import ExampleScreen from './ExampleScreen';
 
-const routes: NavigationRouteConfigMap = Object.freeze({
+const routes = (): NavigationRouteConfigMap => ({
   Example: {
     screen: ExampleScreen,
   },

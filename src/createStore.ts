@@ -13,6 +13,8 @@ import { isTest } from './util/env';
 import createReducer from './reducers';
 import rootSaga from './sagas';
 
+const remoteDevTools = require('remote-redux-devtools');
+
 export interface StoreConfiguration {
     reducers: { [key: string]: Reducer },
     middleware?: Middleware[],
@@ -38,7 +40,7 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
 
   const enhancer = (
     devTools
-      ? require('remote-redux-devtools').composeWithDevTools({
+      ? remoteDevTools.composeWithDevTools({
         realtime: true,
         port:     8000,
       })
