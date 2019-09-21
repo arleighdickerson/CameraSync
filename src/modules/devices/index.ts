@@ -2,13 +2,16 @@ import * as typesafe from 'typesafe-actions';
 import * as redux from 'redux';
 import * as models from './models';
 import { DeviceList } from './models';
+import containerModule from './inversify.module';
+
+export { containerModule };
 
 export enum actionTypes {
-  INIT_DEVICE_LIST = 'devices/INIT_DEVICE_LIST',
-  ATTACH_ALL_DEVICES = 'devices/ATTACH_ALL_DEVICES',
-  DETACH_ALL_DEVICES = 'devices/DETACH_ALL_DEVICES',
-  ATTACH_DEVICE = 'devices/ATTACH_DEVICE',
-  DETACH_DEVICE = 'devices/DETACH_DEVICE',
+    INIT_DEVICE_LIST = 'devices/INIT_DEVICE_LIST',
+    ATTACH_ALL_DEVICES = 'devices/ATTACH_ALL_DEVICES',
+    DETACH_ALL_DEVICES = 'devices/DETACH_ALL_DEVICES',
+    ATTACH_DEVICE = 'devices/ATTACH_DEVICE',
+    DETACH_DEVICE = 'devices/DETACH_DEVICE',
 }
 
 interface DeviceInfo extends models.DeviceInfo {

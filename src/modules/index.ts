@@ -1,10 +1,5 @@
-import emitterModule from './emitter/inversify.module';
-import deviceModule from './devices/inversify.module';
-import permissionModule from './permissions/inversify.module';
-import { TokenContainerModule } from 'inversify-token';
+import * as emitter from './emitter';
+import * as devices from './devices';
+import * as permissions from './permissions';
 
-export const containerModules: { [key: string]: TokenContainerModule } = Object.freeze({
-  emitter:     emitterModule,
-  devices:     deviceModule,
-  permissions: permissionModule,
-});
+export { emitter, devices, permissions };
