@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { createStackNavigator, NavigationContainer } from 'react-navigation';
+import { NavigationContainer } from 'react-navigation';
 import {
   createNavigationReducer,
   createReactNavigationReduxMiddleware,
