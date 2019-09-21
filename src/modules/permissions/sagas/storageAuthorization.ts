@@ -1,24 +1,26 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { PermissionDuck } from 'src/modules/permissions';
+import { getToken } from 'inversify-token';
+import { container } from 'src/ioc';
+import * as TYPES from 'src/types';
+import * as permissionActions from '..';
 
-export default function createSaga(duck: PermissionDuck) {
-  const { storageDenied, storageGranted } = duck.creators;
-  const { REQUEST_STORAGE } = duck.types;
-  const source = duck.permissionSource;
+const { REQUEST_STORAGE } = permissionActions.actionTypes;
 
-  function* requestStorageAuthorization() {
-    const wasGranted = yield source.authorizeStorage();
-    const createAction = wasGranted ? storageGranted : storageDenied;
-    yield put(createAction());
-  }
+const { storageDenied, storageGranted } = permissionActions;
 
-  function* watchStorageRequests() {
-    yield takeEvery(REQUEST_STORAGE, requestStorageAuthorization);
-  }
+function* requestStorageAuthorization() {
+  const permissionSource = getToken(container, TYPES.PermissionSource);
+  const wasGranted = yield permissionSource.authorizeStorage();
+  const createAction = wasGranted ? storageGranted : storageDenied;
+  yield put(createAction());
+}
 
-  return function* storageAuthorization() {
-    yield all([
-      fork(watchStorageRequests),
-    ]);
-  };
+function* watchStorageRequests() {
+  yield takeEvery(REQUEST_STORAGE, requestStorageAuthorization);
+}
+
+export default function* storageAuthorization() {
+  yield all([
+    fork(watchStorageRequests),
+  ]);
 }

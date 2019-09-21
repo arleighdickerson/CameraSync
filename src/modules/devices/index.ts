@@ -1,17 +1,26 @@
-import { Duck } from 'lib/duck';
-import * as TYPES from 'src/types';
-import { DeviceList, default as models } from './models';
+import * as typesafe from 'typesafe-actions';
 import * as redux from 'redux';
-import { injectable } from 'inversify';
-import { DeviceSource } from './sources/DeviceSource';
-import getDecorators from 'inversify-inject-decorators';
-import deviceSaga from './sagas';
-import { container } from 'src/ioc';
+import * as models from './models';
+import { DeviceList } from './models';
+
+export enum actionTypes {
+  INIT_DEVICE_LIST = 'devices/INIT_DEVICE_LIST',
+  ATTACH_ALL_DEVICES = 'devices/ATTACH_ALL_DEVICES',
+  DETACH_ALL_DEVICES = 'devices/DETACH_ALL_DEVICES',
+  ATTACH_DEVICE = 'devices/ATTACH_DEVICE',
+  DETACH_DEVICE = 'devices/DETACH_DEVICE',
+}
 
 interface DeviceInfo extends models.DeviceInfo {
 }
 
 type DeviceState = DeviceList | null
+
+export const initDeviceList = () => typesafe.action(actionTypes.INIT_DEVICE_LIST);
+export const attachAll = (deviceList: DeviceList) => typesafe.action(actionTypes.ATTACH_ALL_DEVICES, deviceList);
+export const detachAll = () => typesafe.action(actionTypes.DETACH_ALL_DEVICES);
+export const attach = (deviceInfo: DeviceInfo) => typesafe.action(actionTypes.ATTACH_DEVICE, deviceInfo);
+export const detach = (deviceName: string) => typesafe.action(actionTypes.DETACH_DEVICE, { deviceName });
 
 function cloneDeviceList(deviceList: DeviceList): DeviceList {
   const newState: DeviceState = {};
@@ -23,100 +32,30 @@ function cloneDeviceList(deviceList: DeviceList): DeviceList {
 
 const initialState: DeviceState = {};
 
-const { lazyInject } = getDecorators(container);
+const reducer: redux.Reducer = (state: DeviceState = initialState, action: any) => {
+  switch (action.type) {
+  case actionTypes.ATTACH_ALL_DEVICES: {
+    const oldState = cloneDeviceList(state || {});
+    const newState = cloneDeviceList(action.payload);
+    return { ...oldState, ...newState };
+  }
+  case actionTypes.DETACH_ALL_DEVICES: {
+    return {};
+  }
+  case actionTypes.ATTACH_DEVICE: {
+    return {
+      ...cloneDeviceList(state || {}),
+      [action.payload.deviceName]: { ...action.payload },
+    };
+  }
+  case actionTypes.DETACH_DEVICE: {
+    const newState = cloneDeviceList(state || {});
+    delete newState[action.payload.deviceName];
+    return newState;
+  }
+  default:
+    return state;
+  }
+};
 
-@injectable()
-export class DeviceDuck extends Duck {
-    @lazyInject(TYPES.DeviceSource.identifier)
-    // @ts-ignore
-    private _deviceSource: DeviceSource;
-
-    public get deviceSource() {
-      return this._deviceSource;
-    }
-
-    get actionTypePrefix() {
-      return 'devices/';
-    }
-
-    get quickTypes() {
-      return {
-        ...super.quickTypes,
-        INIT_DEVICE_LIST:   1,
-        ATTACH_ALL_DEVICES: 1,
-        DETACH_ALL_DEVICES: 1,
-        ATTACH_DEVICE:      1,
-        DETACH_DEVICE:      1,
-      };
-    }
-
-    get creators() {
-      const actionTypes = this.types;
-      return {
-        initDeviceList() {
-          return { type: actionTypes.INIT_DEVICE_LIST };
-        },
-        attachAll(deviceList: DeviceList) {
-          return {
-            type:    actionTypes.ATTACH_ALL_DEVICES,
-            payload: deviceList,
-          };
-        },
-        detachAll() {
-          return {
-            type: actionTypes.DETACH_ALL_DEVICES,
-          };
-        },
-        attach(deviceInfo: DeviceInfo) {
-          return {
-            type:    actionTypes.ATTACH_DEVICE,
-            payload: deviceInfo,
-          };
-        },
-        detach(deviceName: string) {
-          return {
-            type:    actionTypes.DETACH_DEVICE,
-            payload: { deviceName },
-          };
-        },
-      };
-    }
-
-    private get deviceReducer(): redux.Reducer {
-      return (state: DeviceState = initialState, action: any) => {
-        const actionTypes = this.types;
-        switch (action.type) {
-        case actionTypes.ATTACH_ALL_DEVICES: {
-          const oldState = cloneDeviceList(state || {});
-          const newState = cloneDeviceList(action.payload);
-          return { ...oldState, ...newState };
-        }
-        case actionTypes.DETACH_ALL_DEVICES: {
-          return {};
-        }
-        case actionTypes.ATTACH_DEVICE: {
-          return {
-            ...cloneDeviceList(state || {}),
-            [action.payload.deviceName]: { ...action.payload },
-          };
-        }
-        case actionTypes.DETACH_DEVICE: {
-          const newState = cloneDeviceList(state || {});
-          delete newState[action.payload.deviceName];
-          return newState;
-        }
-        default:
-          return state;
-        }
-      };
-    }
-
-    get reducer() {
-      return this.deviceReducer;
-    }
-
-    * saga() {
-      yield* super.saga();
-      yield deviceSaga(this);
-    }
-}
+export default reducer;

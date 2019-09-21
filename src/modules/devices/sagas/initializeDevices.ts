@@ -1,19 +1,24 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { DeviceDuck } from '../';
+import * as deviceActions from '..';
 
-export default function createSaga(duck: DeviceDuck) {
-  function* fetchDevices() {
-    const deviceList = yield duck.deviceSource.fetchAll();
-    yield put(duck.creators.attachAll(deviceList));
-  }
+import { container } from 'src/ioc';
+import { getToken } from 'inversify-token';
+import * as TYPES from 'src/types';
 
-  function* watchDeviceListInit() {
-    yield takeEvery(duck.types.INIT_DEVICE_LIST, fetchDevices);
-  }
+const { INIT_DEVICE_LIST } = deviceActions.actionTypes;
 
-  return function* initializeDevices() {
-    yield all([
-      fork(watchDeviceListInit),
-    ]);
-  };
+function* fetchDevices() {
+  const deviceSource = getToken(container, TYPES.DeviceSource);
+  const deviceList = yield deviceSource.fetchAll();
+  yield put(deviceActions.attachAll(deviceList));
+}
+
+function* watchDeviceListInit() {
+  yield takeEvery(INIT_DEVICE_LIST, fetchDevices);
+}
+
+export default function* initializeDevices() {
+  yield all([
+    fork(watchDeviceListInit),
+  ]);
 }

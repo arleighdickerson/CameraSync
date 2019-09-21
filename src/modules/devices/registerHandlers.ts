@@ -1,28 +1,24 @@
 import { Store } from 'redux';
 
 import { isDeviceEvent } from './models';
-
+import * as deviceModule from './';
 import { container } from 'src/ioc';
 import { getToken } from 'inversify-token';
 import * as TYPES from 'src/types';
 import { EventEmitter } from 'events';
-import { DeviceDuck } from './';
 
-// @todo make this work with duck
 export default (store: Store) => {
-  const deviceDuck: DeviceDuck = getToken(container, TYPES.DeviceDuck);
+  const deviceSource = getToken(container, TYPES.DeviceSource);
+  const emitter: EventEmitter = getToken(container, TYPES.EventSource);
 
-  const { deviceSource, creators } = deviceDuck;
-
-  const emitter: EventEmitter = container.get(TYPES.EventSource.identifier);
   emitter.addListener(deviceSource.EVENT_DEVICE_ATTACHED, (evt) => {
     if (isDeviceEvent(evt)) {
-      store.dispatch(creators.attach(evt.payload));
+      store.dispatch(deviceModule.attach(evt.payload));
     }
   });
   emitter.addListener(deviceSource.EVENT_DEVICE_DETACHED, evt => {
     if (isDeviceEvent(evt)) {
-      store.dispatch(creators.detach(evt.payload.deviceName));
+      store.dispatch(deviceModule.detach(evt.payload.deviceName));
     }
   });
 };

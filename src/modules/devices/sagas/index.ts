@@ -1,9 +1,8 @@
 import { all } from 'redux-saga/effects';
 import initializeDevices from './initializeDevices';
-import { DeviceDuck } from '../';
 
-export default function* deviceSaga(duck: DeviceDuck) {
+export default function* deviceSaga() {
   yield all([
-    initializeDevices(duck),
+    initializeDevices(),
   ]);
 }

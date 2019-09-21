@@ -1,23 +1,27 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
-import { PermissionDuck } from 'src/modules/permissions';
+import { ActionType } from 'typesafe-actions';
+import { container } from 'src/ioc';
+import { getToken } from 'inversify-token';
+import * as TYPES from 'src/types';
+import * as permissionActions from '..';
 
+const { REQUEST_DEVICE } = permissionActions.actionTypes;
+const { requestDevice, deviceGranted, deviceDenied } = permissionActions;
 
-export default function createSaga(duck: PermissionDuck) {
-  function* requestDeviceAuthorization(action: any) {
-    const { deviceName } = action.payload;
-    const wasGranted = yield duck.creators.requestDevice(deviceName);
-    const { deviceGranted, deviceDenied } = duck.creators;
-    const createAction = wasGranted ? deviceGranted : deviceDenied;
-    yield put(createAction(deviceName));
-  }
+function* requestDeviceAuthorization(action: ActionType<typeof requestDevice>) {
+  const { deviceName } = action.payload;
+  const permissionSource = getToken(container, TYPES.PermissionSource);
+  const wasGranted = yield permissionSource.authorizeDevice(deviceName);
+  const createAction = wasGranted ? deviceGranted : deviceDenied;
+  yield put(createAction(deviceName));
+}
 
-  function* watchDeviceRequests() {
-    yield takeEvery(duck.types.REQUEST_DEVICE, requestDeviceAuthorization);
-  }
+function* watchDeviceRequests() {
+  yield takeEvery(REQUEST_DEVICE, requestDeviceAuthorization);
+}
 
-  return function* deviceAuthorization() {
-    yield all([
-      fork(watchDeviceRequests),
-    ]);
-  };
+export default function* deviceAuthorization() {
+  yield all([
+    fork(watchDeviceRequests),
+  ]);
 }
