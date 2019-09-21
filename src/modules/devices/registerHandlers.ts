@@ -11,14 +11,21 @@ export default (store: Store) => {
   const deviceSource = getToken(container, TYPES.DeviceSource);
   const emitter: EventEmitter = getToken(container, TYPES.EventSource);
 
-  emitter.addListener(deviceSource.EVENT_DEVICE_ATTACHED, (evt) => {
-    if (isDeviceEvent(evt)) {
-      store.dispatch(deviceModule.attach(evt.payload));
-    }
-  });
-  emitter.addListener(deviceSource.EVENT_DEVICE_DETACHED, evt => {
-    if (isDeviceEvent(evt)) {
-      store.dispatch(deviceModule.detach(evt.payload.deviceName));
-    }
+  const listeners = {
+    [deviceSource.EVENT_DEVICE_ATTACHED]: (evt: any) => {
+      if (isDeviceEvent(evt)) {
+        store.dispatch(deviceModule.attach(evt.payload));
+      }
+    },
+    [deviceSource.EVENT_DEVICE_DETACHED]: (evt: any) => {
+      if (isDeviceEvent(evt)) {
+        store.dispatch(deviceModule.detach(evt.payload.deviceName));
+      }
+    },
+  };
+
+  Object.entries(listeners).forEach(([name, listener]) => {
+    emitter.removeAllListeners(name);
+    emitter.addListener(name, listener);
   });
 };

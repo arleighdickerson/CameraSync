@@ -1,6 +1,6 @@
 import { Store } from 'redux';
-
+import registerHandlers from './modules/devices/registerHandlers';
 
 export default (store: Store) => {
-  require('./modules/devices/registerHandlers').default(store);
+  registerHandlers(store);
 };
