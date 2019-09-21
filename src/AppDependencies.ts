@@ -10,8 +10,6 @@ import { TokenContainerModule } from 'inversify-token';
 import * as TYPES from './types';
 import createRoutes from './routes';
 import createReduxStore from './createStore';
-import registerHandlers from './registerHandlers';
-import readyCallback from './readyCallback';
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
 
@@ -58,9 +56,6 @@ class AppDependencies extends TokenContainerModule {
             createReactNavigationReduxMiddleware(mapStateToProps),
           ],
         });
-
-        registerHandlers(this._store);
-        readyCallback(this._store);
       }
       return this._store;
     }

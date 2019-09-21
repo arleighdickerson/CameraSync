@@ -33,7 +33,7 @@ function cloneDeviceList(deviceList: DeviceList): DeviceList {
   return newState;
 }
 
-const initialState: DeviceState = {};
+const initialState: DeviceState = null;
 
 const reducer: redux.Reducer = (state: DeviceState = initialState, action: any) => {
   switch (action.type) {
