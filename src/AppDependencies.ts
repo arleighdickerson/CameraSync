@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { NavigationContainer } from 'react-navigation';
 import {
   createNavigationReducer,
   createReactNavigationReduxMiddleware,
@@ -14,7 +13,7 @@ import createReduxStore from './createStore';
 const mapStateToProps = (state: any) => ({ state: state.nav });
 
 class AppDependencies extends TokenContainerModule {
-    private _AppNavigator?: NavigationContainer;
+    private _AppNavigator?: any;
     private _App?: any;
     private _AppWithNavigationState?: any;
     private _store?: any;

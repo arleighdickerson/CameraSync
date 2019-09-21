@@ -1,11 +1,8 @@
-import {
-  createDrawerNavigator,
-  // createStackNavigator
-} from 'react-navigation';
+import * as reactNavigation from 'react-navigation';
 import HomeScreen from './HomeScreen';
 import SettingsScreen from './SettingsScreen';
 
-const routes = () => createDrawerNavigator({
+const routes = () => reactNavigation.createSwitchNavigator({
   Home: {
     screen: HomeScreen,
   },

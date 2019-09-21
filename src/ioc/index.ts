@@ -6,6 +6,12 @@ import appDependencies from 'src/AppDependencies';
 
 export const container: Container = createGhostObject(() => {
   const instance = new Container();
-  instance.load(...Object.values(modules).map(m => m.containerModule), emitter, appDependencies);
+
+  instance.load(
+    ...Object.values(modules).map(m => m.containerModule),
+    emitter,
+    appDependencies
+  );
+
   return instance;
 });
