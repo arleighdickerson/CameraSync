@@ -10,7 +10,7 @@ import {
 import createSagaMiddleware from 'redux-saga';
 
 import { isTest } from './util/env';
-import createReducer from './reducers';
+import createReducer from './createReducer';
 import rootSaga from './sagas';
 
 const remoteDevTools = require('remote-redux-devtools');

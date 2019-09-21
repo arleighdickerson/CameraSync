@@ -2,12 +2,11 @@ import { Reducer, combineReducers } from 'redux';
 
 // reducers
 import { reducer as form } from 'redux-form';
-import devices from './modules/devices';
-import permissions from './modules/permissions';
+import * as modules from './modules';
+import _ from 'lodash';
 
 export default (reducers: { [key: string]: Reducer }) => combineReducers({
   ...reducers,
   form,
-  devices,
-  permissions,
+  ..._.mapValues(modules, (v) => v.default),
 });

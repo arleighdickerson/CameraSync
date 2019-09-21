@@ -1,11 +1,17 @@
-import { NavigationRouteConfigMap } from 'react-navigation';
-import ExampleScreen from './ExampleScreen';
+import {
+  createDrawerNavigator,
+  // createStackNavigator
+} from 'react-navigation';
+import HomeScreen from './HomeScreen';
+import SettingsScreen from './SettingsScreen';
 
-const routes = (): NavigationRouteConfigMap => ({
-  Example: {
-    screen: ExampleScreen,
+const routes = () => createDrawerNavigator({
+  Home: {
+    screen: HomeScreen,
   },
-  path: 'example',
+  Settings: {
+    screen: SettingsScreen,
+  },
 });
 
 export default routes;

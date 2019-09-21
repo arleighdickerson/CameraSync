@@ -8,7 +8,7 @@ import {
 import { TokenContainerModule } from 'inversify-token';
 
 import * as TYPES from './types';
-import createRoutes from './routes';
+import createNavigator from './routes';
 import createReduxStore from './createStore';
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
@@ -27,7 +27,7 @@ class AppDependencies extends TokenContainerModule {
 
     get AppNavigator() {
       if (!this._AppNavigator) {
-        this._AppNavigator = createStackNavigator(createRoutes());
+        this._AppNavigator = createNavigator();
       }
       return this._AppNavigator;
     }
