@@ -1,4 +1,4 @@
-import { container } from 'src/ioc';
+import { container } from 'ioc';
 
 class TestClass {
     private static _id: number = 0;

@@ -1,21 +1,18 @@
 import { select, all, fork, put, takeEvery } from 'redux-saga/effects';
-import * as deviceActions from '..';
 
-import { container } from 'src/ioc';
+import { container } from 'ioc';
 import { getToken } from 'inversify-token';
-import * as TYPES from 'src/types';
-import * as deviceModule from '../index';
-
-const { INIT_DEVICE_LIST } = deviceActions.actionTypes;
+import * as TYPES from 'types';
+import * as deviceModule from '..';
 
 function* fetchDevices() {
   const deviceSource = getToken(container, TYPES.DeviceSource);
   const deviceList = yield deviceSource.fetchAll();
-  yield put(deviceActions.attachAll(deviceList));
+  yield put(deviceModule.attachAll(deviceList));
 }
 
 function* watchDeviceListInit() {
-  yield takeEvery(INIT_DEVICE_LIST, fetchDevices);
+  yield takeEvery(deviceModule.actionTypes.INIT_DEVICE_LIST, fetchDevices);
 }
 
 function* init() {

@@ -1,6 +1,6 @@
 import { TokenContainerModule } from 'inversify-token';
-import * as TYPES from 'src/types';
-import { isTest } from 'src/util/env';
+import * as TYPES from 'types';
+import { isTest } from 'util/env';
 import { NativePermissionSource } from './sources/NativePermissionSource';
 import { MockPermissionSource } from './sources/MockPermissionSource';
 

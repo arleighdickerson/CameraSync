@@ -1,18 +1,19 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
 import { ActionType } from 'typesafe-actions';
-import * as permissionActions from '../';
-import * as deviceActions from 'src/modules/devices';
 
-const { forgetDevice, forgetAllDevices } = permissionActions;
-const { detach } = deviceActions;
-const { DETACH_DEVICE, DETACH_ALL_DEVICES } = deviceActions.actionTypes;
+import {
+  forgetDevice,
+  forgetAllDevices,
+  actionTypes as permissionTypes,
+} from 'modules/permissions';
+import { detach, actionTypes as deviceTypes } from 'modules/devices';
 
 function* forgetDeviceAuthorization(action: ActionType<typeof detach>) {
   yield put(forgetDevice(action.payload.deviceName));
 }
 
 function* watchForDetachedDevice() {
-  yield takeEvery(DETACH_DEVICE, forgetDeviceAuthorization);
+  yield takeEvery(deviceTypes.DETACH_DEVICE, forgetDeviceAuthorization);
 }
 
 function* forgetAllDeviceAuthorizations() {
@@ -20,7 +21,7 @@ function* forgetAllDeviceAuthorizations() {
 }
 
 function* watchForAllDevicesDetached() {
-  yield takeEvery(DETACH_ALL_DEVICES, forgetAllDeviceAuthorizations);
+  yield takeEvery(deviceTypes.DETACH_ALL_DEVICES, forgetAllDeviceAuthorizations);
 }
 
 export default function* forgetDevicesOnDisconnect() {

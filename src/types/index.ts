@@ -1,7 +1,7 @@
 import { Token, TokenType } from 'inversify-token';
 import { EventEmitter as EventSource } from 'events';
-import { PermissionSource } from 'src/modules/permissions/sources/PermissionSource';
-import { DeviceSource } from 'src/modules/devices/sources/DeviceSource';
+import { PermissionSource } from 'modules/permissions/sources/PermissionSource';
+import { DeviceSource } from 'modules/devices/sources/DeviceSource';
 import { Store } from 'redux';
 
 const PermissionSourceToken = new Token<PermissionSource>(Symbol.for('PermissionSource'));

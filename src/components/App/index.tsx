@@ -1,6 +1,6 @@
 import React from 'react';
-import dependencies from './AppDependencies';
 import { Provider } from 'react-redux';
+import dependencies from './inversify.module';
 
 export default () => (
   <Provider store={dependencies.store}>

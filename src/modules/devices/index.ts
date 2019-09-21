@@ -1,10 +1,10 @@
 import * as typesafe from 'typesafe-actions';
 import * as redux from 'redux';
 import * as models from './models';
-import { DeviceList } from './models';
 import containerModule from './inversify.module';
+import saga from './sagas';
 
-export { containerModule };
+export { saga, containerModule };
 
 export enum actionTypes {
     INIT_DEVICE_LIST = 'devices/INIT_DEVICE_LIST',
@@ -15,6 +15,9 @@ export enum actionTypes {
 }
 
 interface DeviceInfo extends models.DeviceInfo {
+}
+
+interface DeviceList extends models.DeviceList {
 }
 
 type DeviceState = DeviceList | null

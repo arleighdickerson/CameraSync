@@ -6,13 +6,13 @@ import {
 } from 'react-navigation-redux-helpers';
 import { TokenContainerModule } from 'inversify-token';
 
-import * as TYPES from './types';
-import createNavigator from './routes';
-import createReduxStore from './createStore';
+import * as TYPES from 'types';
+import createNavigator from 'routes';
+import createReduxStore from 'store/createStore';
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
 
-class AppDependencies extends TokenContainerModule {
+export class AppDependencies extends TokenContainerModule {
     private _AppNavigator?: any;
     private _App?: any;
     private _AppWithNavigationState?: any;
