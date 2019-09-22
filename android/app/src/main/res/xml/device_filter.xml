@@ -3,6 +3,6 @@
   <usb-device
     class="6"
     protocol="1"
-    subclass="1"/>
-  <usb-device/>
+    subclass="1" />
+  <usb-device />
 </resources>

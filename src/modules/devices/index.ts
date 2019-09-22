@@ -1,18 +1,23 @@
-import * as typesafe from 'typesafe-actions';
-import * as redux from 'redux';
-import * as models from './models';
+import {
+  createReducer,
+  createStandardAction,
+} from 'typesafe-actions';
+import { makeTypes } from 'util/typeHelpers';
 import containerModule from './inversify.module';
 import saga from './sagas';
+import * as models from './models';
 
 export { saga, containerModule };
 
-export enum actionTypes {
-    INIT_DEVICE_LIST = 'devices/INIT_DEVICE_LIST',
-    ATTACH_ALL_DEVICES = 'devices/ATTACH_ALL_DEVICES',
-    DETACH_ALL_DEVICES = 'devices/DETACH_ALL_DEVICES',
-    ATTACH_DEVICE = 'devices/ATTACH_DEVICE',
-    DETACH_DEVICE = 'devices/DETACH_DEVICE',
-}
+const types = makeTypes({
+  INIT_DEVICE_LIST:   null,
+  ATTACH_ALL_DEVICES: null,
+  DETACH_ALL_DEVICES: null,
+  ATTACH_DEVICE:      null,
+  DETACH_DEVICE:      null,
+}, 'devices/');
+
+export { types as actionTypes };
 
 interface DeviceInfo extends models.DeviceInfo {
 }
@@ -22,11 +27,23 @@ interface DeviceList extends models.DeviceList {
 
 type DeviceState = DeviceList | null
 
-export const initDeviceList = () => typesafe.action(actionTypes.INIT_DEVICE_LIST);
-export const attachAll = (deviceList: DeviceList) => typesafe.action(actionTypes.ATTACH_ALL_DEVICES, deviceList);
-export const detachAll = () => typesafe.action(actionTypes.DETACH_ALL_DEVICES);
-export const attach = (deviceInfo: DeviceInfo) => typesafe.action(actionTypes.ATTACH_DEVICE, deviceInfo);
-export const detach = (deviceName: string) => typesafe.action(actionTypes.DETACH_DEVICE, { deviceName });
+export const initDeviceList = createStandardAction(types.INIT_DEVICE_LIST)();
+export const attachAll = createStandardAction(types.ATTACH_ALL_DEVICES).map(
+  (deviceList: DeviceList): { payload: DeviceList } => ({
+    payload: deviceList,
+  })
+);
+export const detachAll = createStandardAction(types.DETACH_ALL_DEVICES)();
+export const attach = createStandardAction(types.ATTACH_DEVICE).map(
+  (deviceInfo: DeviceInfo): { payload: DeviceInfo } => ({
+    payload: deviceInfo,
+  })
+);
+export const detach = createStandardAction(types.DETACH_DEVICE).map(
+  (deviceName: string): { payload: { deviceName: string } } => ({
+    payload: { deviceName },
+  })
+);
 
 function cloneDeviceList(deviceList: DeviceList): DeviceList {
   const newState: DeviceState = {};
@@ -38,30 +55,23 @@ function cloneDeviceList(deviceList: DeviceList): DeviceList {
 
 const initialState: DeviceState = null;
 
-const reducer: redux.Reducer = (state: DeviceState = initialState, action: any) => {
-  switch (action.type) {
-  case actionTypes.ATTACH_ALL_DEVICES: {
+export default createReducer(initialState as DeviceState)
+  .handleAction(attachAll, (state, action) => {
     const oldState = cloneDeviceList(state || {});
     const newState = cloneDeviceList(action.payload);
     return { ...oldState, ...newState };
-  }
-  case actionTypes.DETACH_ALL_DEVICES: {
+  })
+  .handleAction(detachAll, () => {
     return {};
-  }
-  case actionTypes.ATTACH_DEVICE: {
+  })
+  .handleAction(attach, (state, action) => {
     return {
       ...cloneDeviceList(state || {}),
       [action.payload.deviceName]: { ...action.payload },
     };
-  }
-  case actionTypes.DETACH_DEVICE: {
+  })
+  .handleAction(detach, (state, action) => {
     const newState = cloneDeviceList(state || {});
     delete newState[action.payload.deviceName];
     return newState;
-  }
-  default:
-    return state;
-  }
-};
-
-export default reducer;
+  });

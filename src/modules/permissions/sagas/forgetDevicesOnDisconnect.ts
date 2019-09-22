@@ -4,7 +4,6 @@ import { ActionType } from 'typesafe-actions';
 import {
   forgetDevice,
   forgetAllDevices,
-  actionTypes as permissionTypes,
 } from 'modules/permissions';
 import { detach, actionTypes as deviceTypes } from 'modules/devices';
 

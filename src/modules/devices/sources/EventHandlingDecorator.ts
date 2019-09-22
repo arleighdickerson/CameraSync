@@ -1,11 +1,11 @@
-import { DeviceSourceWrapper } from './DeviceSourceWrapper';
-import * as TYPES from 'types';
 import { getToken } from 'inversify-token';
+import { postConstruct } from 'inversify';
+import * as TYPES from 'types';
 import { container } from 'ioc';
+import { DeviceSourceWrapper } from './DeviceSourceWrapper';
 import { isDeviceEvent } from '../models';
 import * as deviceModule from '../index';
 import { DeviceSource } from './DeviceSource';
-import { postConstruct } from 'inversify';
 import { Constructor } from 'util/typeHelpers';
 
 export abstract class EventHandlingDecorator extends DeviceSourceWrapper {
