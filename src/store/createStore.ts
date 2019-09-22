@@ -63,8 +63,9 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
 
   if (opts.persistStore) {
     const persistConfig = {
-      key:     'root',
-      storage: require('@react-native-community/async-storage').default,
+      key:       'root',
+      storage:   require('@react-native-community/async-storage').default,
+      blacklist: Object.keys(reducers), // blacklisting everything for now
     };
 
     rootReducer = reduxPersist.persistReducer(persistConfig, rootReducer);
