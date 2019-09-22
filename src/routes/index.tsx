@@ -1,14 +1,18 @@
 import * as reactNavigation from 'react-navigation';
-import HomeScreen from './HomeScreen';
-import SettingsScreen from './SettingsScreen';
+import DeviceStack from './DeviceStack';
+import Splash from 'components/Splash';
 
 const routes = () => reactNavigation.createSwitchNavigator({
-  Home: {
-    screen: HomeScreen,
+  DeviceStack: {
+    screen: DeviceStack,
+    // navigationOptions: { backBehavior: 'none' },
   },
-  Settings: {
-    screen: SettingsScreen,
+  Splash: {
+    screen: Splash,
   },
+}, {
+  initialRouteName: 'DeviceStack',
+  backBehavior:     'none',
 });
 
 export default routes;

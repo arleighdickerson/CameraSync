@@ -8,12 +8,13 @@ import {
   Middleware,
 } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import * as reduxPersist from 'redux-persist';
 
 import { isTest } from 'util/env';
 import createReducer from './createReducer';
 import rootSaga from './rootSaga';
+import Deferred from 'util/Deferred';
 
-const remoteDevTools = require('remote-redux-devtools');
 
 export interface StoreConfiguration {
     reducers: { [key: string]: Reducer },
@@ -22,15 +23,23 @@ export interface StoreConfiguration {
 }
 
 export interface StoreOptions {
-    devTools: boolean
+    devTools: boolean,
+    persistStore: boolean
 }
 
 const createDefaultOptions = (): StoreOptions => ({
-  devTools: __DEV__ && !isTest,
+  devTools:     __DEV__ && !isTest,
+  persistStore: __DEV__ && !isTest,
 });
 
-export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguration, options?: StoreOptions): Store => {
-  const { devTools } = { ...createDefaultOptions(), ...options };
+export type CreatedStore = {
+    store: Store,
+    persistor: reduxPersist.Persistor | null,
+    ready: Promise<void>
+}
+
+export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguration, options?: StoreOptions): CreatedStore => {
+  const opts = { ...createDefaultOptions(), ...options };
 
   const sagaMiddleWare = createSagaMiddleware();
 
@@ -39,8 +48,8 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
   ];
 
   const enhancer = (
-    devTools
-      ? remoteDevTools.composeWithDevTools({
+    opts.devTools
+      ? require('remote-redux-devtools').composeWithDevTools({
         realtime: true,
         port:     8000,
       })
@@ -50,11 +59,50 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
     ...enhancers
   );
 
+  let rootReducer: any = createReducer(reducers);
+
+  if (opts.persistStore) {
+    const persistConfig = {
+      key:     'root',
+      storage: require('@react-native-community/async-storage').default,
+    };
+
+    rootReducer = reduxPersist.persistReducer(persistConfig, rootReducer);
+  }
+
   // create store
-  const store = createStore(createReducer(reducers), enhancer);
+  const store = createStore(
+    rootReducer,
+    enhancer
+  );
+
+  let ready: Promise<void> = Promise.resolve();
+  let persistor = null;
+
+  if (opts.persistStore) {
+
+    const deferred: Deferred<void> = new Deferred();
+    ready = deferred.promise;
+
+    const persistorOptions = null; // enhancer?
+
+    const callback = (error?: any) => {
+      if (error) {
+        deferred.reject(error);
+      } else {
+        deferred.resolve();
+      }
+    };
+
+    persistor = reduxPersist.persistStore(store, persistorOptions, callback);
+  }
 
   // start sags
   sagaMiddleWare.run(rootSaga);
 
-  return store;
+  return {
+    store,
+    persistor,
+    ready,
+  };
 };

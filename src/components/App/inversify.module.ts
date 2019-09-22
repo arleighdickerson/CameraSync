@@ -8,7 +8,7 @@ import { TokenContainerModule } from 'inversify-token';
 
 import * as TYPES from 'types';
 import createNavigator from 'routes';
-import createReduxStore from 'store/createStore';
+import createReduxStore, { CreatedStore } from 'store/createStore';
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
 
@@ -16,7 +16,7 @@ export class AppDependencies extends TokenContainerModule {
     private _AppNavigator?: any;
     private _App?: any;
     private _AppWithNavigationState?: any;
-    private _store?: any;
+    private _createdStoreResult?: CreatedStore;
 
     constructor() {
       super(bindToken => {
@@ -46,8 +46,20 @@ export class AppDependencies extends TokenContainerModule {
     }
 
     get store() {
-      if (!this._store) {
-        this._store = createReduxStore({
+      return this.createdStoreResult.store;
+    }
+
+    get persistor() {
+      return this.createdStoreResult.persistor;
+    }
+
+    get ready() {
+      return this.createdStoreResult.ready;
+    }
+
+    private get createdStoreResult() {
+      if (!this._createdStoreResult) {
+        this._createdStoreResult = createReduxStore({
           reducers: {
             nav: createNavigationReducer(this.AppNavigator),
           },
@@ -56,7 +68,7 @@ export class AppDependencies extends TokenContainerModule {
           ],
         });
       }
-      return this._store;
+      return this._createdStoreResult;
     }
 }
 

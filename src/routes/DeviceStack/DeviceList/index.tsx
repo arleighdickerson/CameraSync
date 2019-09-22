@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const HomeScreen = () => {
+const DeviceList = () => {
   return (
     <View>
-      <Text>This is Home Screen</Text>
+      <Text>This is the Device List Screen</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default DeviceList;

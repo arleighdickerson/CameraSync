@@ -3,7 +3,6 @@ import { PureComponent, ReactNode as Node } from 'react';
 interface Props {
     loading?: Node,
     ready: Promise<any>,
-    beforeLift: () => any,
     afterLift: () => any
 }
 
@@ -14,9 +13,8 @@ interface State {
 
 export default class PersistGate extends PureComponent<Props, State> {
     static defaultProps = {
-      loading:    null,
-      beforeLift: null,
-      afterLift:  null,
+      loading:   null,
+      afterLift: null,
     };
 
     state = {
@@ -31,14 +29,6 @@ export default class PersistGate extends PureComponent<Props, State> {
             this.setState({ bootstrapped: true, subscribed: false });
           }
         });
-      }
-    }
-
-    componentWillUpdate(nextProps: Props, nextState: State) {
-      if (!this.state.bootstrapped && nextState.bootstrapped) {
-        if (this.props.beforeLift) {
-          this.props.beforeLift();
-        }
       }
     }
 
