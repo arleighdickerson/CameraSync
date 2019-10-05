@@ -10,9 +10,10 @@ import {
 } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import * as reduxPersist from 'redux-persist';
+import _ from 'lodash';
 
 import createComposer from './createComposer';
-import createReducer from './createReducer';
+import createReducer, { getReducerKeys } from './createReducer';
 import rootSaga from './rootSaga';
 import Deferred from 'util/Deferred';
 
@@ -58,13 +59,13 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
     ...enhancers
   );
 
-  let rootReducer: any = createReducer(reducers);
+  let rootReducer: Reducer = createReducer(reducers);
 
   if (opts.persistStore) {
     const persistConfig = {
       key:       'root',
       storage:   AsyncStorage,
-      blacklist: Object.keys(reducers), // blacklisting everything for now
+      blacklist: getReducerKeys(rootReducer), // blacklisting everything for now
     };
 
     rootReducer = reduxPersist.persistReducer(persistConfig, rootReducer);
@@ -95,10 +96,18 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
     };
 
     persistor = reduxPersist.persistStore(store, persistorOptions, callback);
-  }
 
-  // start sags
-  sagaMiddleWare.run(rootSaga);
+    const unsubscribe = store.subscribe(() => {
+      if (_.get(store.getState(), '_persist.rehydrated', false)) {
+        unsubscribe();
+        // start sags
+        sagaMiddleWare.run(rootSaga);
+      }
+    });
+  } else {
+    // start sags
+    sagaMiddleWare.run(rootSaga);
+  }
 
   return {
     store,
