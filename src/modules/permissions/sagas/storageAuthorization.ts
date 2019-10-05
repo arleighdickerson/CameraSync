@@ -2,7 +2,7 @@ import { all, fork, put, takeEvery } from 'redux-saga/effects';
 import { getToken } from 'inversify-token';
 import { container } from 'ioc';
 import * as TYPES from 'types';
-import { actionTypes, storageDenied, storageGranted } from '../';
+import { actionTypes, storageDenied, storageGranted } from '../actions';
 
 function* requestStorageAuthorization() {
   const permissionSource = getToken(container, TYPES.PermissionSource);

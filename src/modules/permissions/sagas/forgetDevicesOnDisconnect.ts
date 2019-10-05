@@ -1,11 +1,8 @@
 import { all, fork, put, takeEvery } from 'redux-saga/effects';
 import { ActionType } from 'typesafe-actions';
 
-import {
-  forgetDevice,
-  forgetAllDevices,
-} from 'modules/permissions';
-import { detach, actionTypes as deviceTypes } from 'modules/devices';
+import { forgetDevice, forgetAllDevices } from 'modules/permissions/actions';
+import { detach, actionTypes as deviceTypes } from 'modules/devices/actions';
 
 function* forgetDeviceAuthorization(action: ActionType<typeof detach>) {
   yield put(forgetDevice(action.payload.deviceName));

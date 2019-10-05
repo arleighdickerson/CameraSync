@@ -4,7 +4,7 @@ import * as TYPES from 'types';
 import { container } from 'ioc';
 import { DeviceSourceWrapper } from './DeviceSourceWrapper';
 import { isDeviceEvent } from '../models';
-import * as deviceModule from '../index';
+import * as deviceModule from '../actions';
 import { DeviceSource } from './DeviceSource';
 import { Constructor } from 'util/typeHelpers';
 

@@ -3,7 +3,7 @@ import { PureComponent, ReactNode as Node } from 'react';
 interface Props {
     loading?: Node,
     ready: Promise<any>,
-    afterLift: () => any
+    afterLift?: () => any
 }
 
 interface State {

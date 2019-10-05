@@ -1,32 +1,22 @@
 // https://stackoverflow.com/questions/51521808/how-do-i-create-a-type-from-a-string-array-in-typescript/
+
 export type Constructor<T = {}> = new (...args: any[]) => T;
+export type ValueOf<T> = T[keyof T];
 
-export type TYPES<T> = { readonly [P in keyof T]: string };
+type Types<T, V> = { readonly [P in keyof T]: V };
+type Factory<T, V> = (value: ValueOf<T>, key?: keyof T) => V
 
-type valueCreator = (key: string) => string
-export function strEnum<T extends string>(
-  o: Array<T>,
-  createValue: valueCreator = (key => key)
-): { [K in T]: K } {
-  return o.reduce((res, key) => {
-    res[key] = createValue(key);
-    return res;
-  }, Object.create(null));
-}
-
-
-export function makeTypes<T>(typeEnum: T, prefix: string = ''): TYPES<T> {
+export function makeTypes<T, V>(typeEnum: T, factory?: Factory<T, V>): Types<T, V> {
   let typeList: string[] = [];
-  const types = {} as TYPES<T>;
+  const types = {} as Types<T, V>;
   if (typeEnum) {
     typeList = typeList.concat(Object.keys(typeEnum));
   }
 
   typeList.forEach(type => {
     // @ts-ignore
-    types[type as string] = prefix + type;
+    types[type as string] = factory(typeEnum[type], type);
   });
 
   return Object.freeze(types);
 }
-

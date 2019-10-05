@@ -3,7 +3,7 @@ import { ActionType } from 'typesafe-actions';
 import { container } from 'ioc';
 import { getToken } from 'inversify-token';
 import * as TYPES from 'types';
-import { requestDevice, deviceGranted, deviceDenied, actionTypes } from '..';
+import { requestDevice, deviceGranted, deviceDenied, actionTypes } from '../actions';
 
 function* requestDeviceAuthorization(action: ActionType<typeof requestDevice>) {
   const { deviceName } = action.payload;

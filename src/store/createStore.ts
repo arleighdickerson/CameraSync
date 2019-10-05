@@ -1,5 +1,6 @@
+// @ts-ignore
+
 import {
-  compose,
   createStore,
   applyMiddleware,
   Store,
@@ -10,11 +11,12 @@ import {
 import createSagaMiddleware from 'redux-saga';
 import * as reduxPersist from 'redux-persist';
 
-import { isTest } from 'util/env';
+import createComposer from './createComposer';
 import createReducer from './createReducer';
 import rootSaga from './rootSaga';
 import Deferred from 'util/Deferred';
 
+import AsyncStorage from '@react-native-community/async-storage';
 
 export interface StoreConfiguration {
     reducers: { [key: string]: Reducer },
@@ -28,8 +30,8 @@ export interface StoreOptions {
 }
 
 const createDefaultOptions = (): StoreOptions => ({
-  devTools:     __DEV__ && !isTest,
-  persistStore: __DEV__ && !isTest,
+  devTools:     true,
+  persistStore: true,// __DEV__ && !isTest,
 });
 
 export type CreatedStore = {
@@ -47,14 +49,11 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
     sagaMiddleWare,
   ];
 
-  const enhancer = (
-    opts.devTools
-      ? require('remote-redux-devtools').composeWithDevTools({
-        realtime: true,
-        port:     8000,
-      })
-      : compose
-  )(
+  const compose = createComposer(opts.devTools, {
+    port: 8000,
+  });
+
+  const enhancer = compose(
     applyMiddleware(...defaultMiddleware, ...middleware),
     ...enhancers
   );
@@ -64,7 +63,7 @@ export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguratio
   if (opts.persistStore) {
     const persistConfig = {
       key:       'root',
-      storage:   require('@react-native-community/async-storage').default,
+      storage:   AsyncStorage,
       blacklist: Object.keys(reducers), // blacklisting everything for now
     };
 

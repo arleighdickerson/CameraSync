@@ -2,36 +2,55 @@ import { DelegatingHandler, VirtualHandler } from './proxyHandlers';
 
 function GhostObject<T>(thunk: () => T) {
   // @ts-ignore
-  this.thunk = thunk;
-  // @ts-ignore
-  this.val = undefined;
+  Object.defineProperty(this, 'val', {
+    get() {
+      return thunk.call(undefined);
+    },
+  });
 }
 
 GhostObject.prototype = Object.create(VirtualHandler.prototype);
 
-GhostObject.prototype.init = function init() {
-  if (this.thunk !== null) {
-    this.val = this.thunk.call(undefined);
-    this.thunk = null;
-  }
-};
-
 const traps = [
-  'getOwnPropertyDescriptor',
+  'apply',
+  'construct',
   'defineProperty',
-  'getPrototypeOf',
+  'deleteProperty',
   'enumerate',
+  'get',
+  'getOwnPropertyDescriptor',
+  'getPrototypeOf',
+  'has',
+  'isExtensible',
   'ownKeys',
+  'preventExtensions',
+  'set',
+  'setPrototypeOf',
 ];
 
 traps.forEach((name) => {
   GhostObject.prototype[name] = function trap(target: any, ...args: any) {
-    this.init();
     // @ts-ignore
     return Reflect[name](this.val, ...args);
   };
 });
 
-export function createGhostObject<T>(factory: () => T): T {
-  return DelegatingHandler.proxyFor.call(GhostObject, {}, factory);
+
+export const singletonize = <T>(factory: () => T) => {
+  let initialized: boolean = false;
+  let result: T;
+  return (): T => {
+    if (!initialized) {
+      [initialized, result] = [true, factory()];
+    }
+    return result;
+  };
+};
+
+export function createGhostObject<T>(factory: () => T, singleton: boolean = true): T {
+  return DelegatingHandler.proxyFor.call(GhostObject, {},
+    singleton
+      ? singletonize(factory)
+      : factory
+  );
 }
