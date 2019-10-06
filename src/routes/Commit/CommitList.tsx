@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import * as styles from 'assets/shared.style';
+import * as styles from 'assets/shared.styles';
 
 const CommitList = () => (
   <View style={styles.container}>

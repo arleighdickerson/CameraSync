@@ -3,7 +3,7 @@ import { EventEmitter as EventSource } from 'events';
 import { PermissionSource } from 'modules/permissions/sources/PermissionSource';
 import { DeviceSource } from 'modules/devices/sources/DeviceSource';
 import { Store } from 'redux';
-import { AppDependencies, DependencyOptions } from 'App';
+import { DependencyOptions } from 'ioc/AppDependencies';
 
 const PermissionSourceToken = new Token<PermissionSource>(Symbol.for('PermissionSource'));
 type PermissionSourceToken = TokenType<typeof PermissionSourceToken>
@@ -20,10 +20,6 @@ export { EventSourceToken as EventSource };
 const StoreToken = new Token<Store>(Symbol.for('Store'));
 type StoreToken = TokenType<typeof StoreToken>
 export { StoreToken as Store };
-
-const AppDependenciesToken = new Token<AppDependencies>(Symbol.for('AppDependencies'));
-type AppDependenciesToken = TokenType<typeof AppDependenciesToken>
-export { AppDependenciesToken as AppDependencies };
 
 const DependencyOptionsToken = new Token<DependencyOptions>(Symbol.for('DependencyOptions'));
 type DependencyOptionsToken = TokenType<typeof DependencyOptionsToken>

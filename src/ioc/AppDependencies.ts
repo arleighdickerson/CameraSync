@@ -18,16 +18,21 @@ import {
 import * as TYPES from 'types';
 import { createNavigator } from 'routes';
 import { createContainer } from 'ioc';
-import { DependencyOptions } from './index';
 import Deferred from 'util/Deferred';
 import * as reduxPersist from 'redux-persist';
 import _ from 'lodash';
-import { rootSaga, createReducer, createComposer } from 'store';
+import { rootSaga, createReducer, createComposer, DevToolOptions } from 'store';
 
 type CreatedStore = {
     store: Store,
     persistor: reduxPersist.Persistor | null,
     ready: Promise<void>
+}
+
+export type DependencyOptions = {
+    devToolOptions: DevToolOptions,
+    persistConfig?: reduxPersist.PersistConfig<any>,
+    navReducerKey: string
 }
 
 const defaults: DependencyOptions = {
@@ -45,7 +50,7 @@ const defaults: DependencyOptions = {
 
 type ReducerMap = { [key: string]: Reducer }
 
-export default class DependencyHandler {
+export default class AppDependencies {
     private readonly navReducerKey: string;
     private readonly mapStateToProps: (state: any) => any;
 

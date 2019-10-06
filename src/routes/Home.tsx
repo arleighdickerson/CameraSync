@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import * as styles from 'assets/shared.style';
+import * as styles from 'assets/shared.styles';
 
 class Home extends PureComponent {
   render() {

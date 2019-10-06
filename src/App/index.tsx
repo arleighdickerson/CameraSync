@@ -5,18 +5,21 @@ import PersistGate from 'components/PersistGate';
 import Splash from 'components/Splash';
 import { createGhostObject } from 'util/ghostObject';
 
-import Dependencies from './Dependencies';
+import AppDependencies from 'ioc/AppDependencies';
 
-import { Props } from './index';
+export type Props = {
+    dependencies: AppDependencies,
+    afterLift?: () => any
+}
 
-const Content = (props: { dependencies: Dependencies }) => {
+const Content = (props: { dependencies: AppDependencies }) => {
   const { AppWithNavigationState } = props.dependencies;
   return <AppWithNavigationState/>;
 };
 
-export default class RootContainer extends React.PureComponent<Props> {
+export default class App extends React.PureComponent<Props> {
     static defaultProps = createGhostObject(() => ({
-      dependencies: new Dependencies(),
+      dependencies: new AppDependencies(),
     }));
 
     render() {

@@ -1,4 +1,4 @@
-import { AppDependencies } from 'App';
+import AppDependencies from '../AppDependencies';
 
 class TestClass {
     private static _id: number = 0;
