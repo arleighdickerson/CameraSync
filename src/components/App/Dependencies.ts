@@ -52,7 +52,6 @@ export default class DependencyHandler {
     private _AppNavigator?: any;
     private _AppContainer?: any;
     private _AppWithNavigationState?: any;
-    private _App?: any;
 
     private _container?: interfaces.Container;
 
@@ -67,30 +66,16 @@ export default class DependencyHandler {
 
     protected readonly containerModule = new TokenContainerModule(
       bindToken => {
-        bindToken(TYPES.Store).toDynamicValue(() => this.store).inSingletonScope();
+        bindToken(TYPES.Store).toDynamicValue(() => this.store);
+        bindToken(TYPES.DependencyOptions).toDynamicValue(() => this.options);
       }
     );
-
 
     constructor(protected readonly options: DependencyOptions = defaults) {
 
       const { navReducerKey } = options;
       this.navReducerKey = navReducerKey;
       this.mapStateToProps = (state: any) => ({ state: state[navReducerKey] });
-    }
-
-    get AppNavigator() {
-      if (!this._AppNavigator) {
-        this._AppNavigator = createNavigator();
-      }
-      return this._AppNavigator;
-    }
-
-    get AppContainer() {
-      if (!this._AppContainer) {
-        this._AppContainer = createReduxContainer(this.AppNavigator);
-      }
-      return this._AppContainer;
     }
 
     get AppWithNavigationState() {
@@ -107,48 +92,6 @@ export default class DependencyHandler {
       return this._container;
     }
 
-    get rootReducer() {
-      if (!this._rootReducer) {
-        this._rootReducer = createReducer(this.reducers, this.options);
-      }
-      return this._rootReducer;
-    }
-
-    get reducers(): ReducerMap {
-      if (!this._reducers) {
-        this._reducers = {
-          [this.navReducerKey]: createNavigationReducer(this.AppNavigator),
-        };
-      }
-      return this._reducers;
-    }
-
-    get sagaMiddleware() {
-      if (!this._sagaMiddleware) {
-        this._sagaMiddleware = this.createSagaMiddleware();
-      }
-      return this._sagaMiddleware;
-    }
-
-    get middleware() {
-      if (!this._middleware) {
-        this._middleware = [
-          this.sagaMiddleware,
-          createReactNavigationReduxMiddleware(this.mapStateToProps),
-
-        ];
-      }
-      return this._middleware;
-    }
-
-    get rootEnhancer() {
-      if (!this._rootEnhancer) {
-        const compose = createComposer(this.options.devToolOptions);
-        this._rootEnhancer = compose(applyMiddleware(...this.middleware), ...this.enhancers);
-      }
-      return this._rootEnhancer;
-    }
-
     get store() {
       return this.createdStoreResult.store;
     }
@@ -159,6 +102,62 @@ export default class DependencyHandler {
 
     get ready() {
       return this.createdStoreResult.ready;
+    }
+
+    protected get AppNavigator() {
+      if (!this._AppNavigator) {
+        this._AppNavigator = createNavigator();
+      }
+      return this._AppNavigator;
+    }
+
+    protected get AppContainer() {
+      if (!this._AppContainer) {
+        this._AppContainer = createReduxContainer(this.AppNavigator);
+      }
+      return this._AppContainer;
+    }
+
+    protected get rootReducer() {
+      if (!this._rootReducer) {
+        this._rootReducer = createReducer(this.reducers, this.options);
+      }
+      return this._rootReducer;
+    }
+
+    protected get reducers(): ReducerMap {
+      if (!this._reducers) {
+        this._reducers = {
+          [this.navReducerKey]: createNavigationReducer(this.AppNavigator),
+        };
+      }
+      return this._reducers;
+    }
+
+    protected get middleware() {
+      if (!this._middleware) {
+        this._middleware = [
+          this.sagaMiddleware,
+          createReactNavigationReduxMiddleware(this.mapStateToProps),
+
+        ];
+      }
+      return this._middleware;
+    }
+
+    protected get rootEnhancer() {
+      if (!this._rootEnhancer) {
+        const compose = createComposer(this.options.devToolOptions);
+        this._rootEnhancer = compose(applyMiddleware(...this.middleware), ...this.enhancers);
+      }
+      return this._rootEnhancer;
+    }
+
+    protected get sagaMiddleware() {
+      if (!this._sagaMiddleware) {
+        this._sagaMiddleware = this.createSagaMiddleware();
+      }
+      return this._sagaMiddleware;
     }
 
     private get createdStoreResult() {
@@ -192,6 +191,7 @@ export default class DependencyHandler {
               this.sagaMiddleware.run(rootSaga);
             }
           });
+
         } else {
           // start sags
           this.sagaMiddleware.run(rootSaga);
@@ -204,10 +204,18 @@ export default class DependencyHandler {
 
     private createSagaMiddleware() {
       const context = {};
-      Object.defineProperty(context, 'container', {
-        get: () => this.container,
+
+      Object.defineProperties(context, {
+        container: {
+          get: () => this.container,
+        },
+        dependencyOptions: {
+          get: () => this.options,
+        },
       });
+
       const sagaMiddlewareOptions = { context };
+
       return _createSagaMiddleware(sagaMiddlewareOptions);
     }
 }
