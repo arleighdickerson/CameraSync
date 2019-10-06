@@ -1,16 +1,16 @@
-import React, { ComponentClass, lazy, ReactNode } from 'react';
+import React, { ComponentClass, ReactNode } from 'react';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
 import Splash from 'components/Splash';
 import PersistGate from 'components/PersistGate';
 import { AppDependencies } from './AppDependencies';
-import { lazyWrap } from '../../util/reactUtil';
+import { lazyWrap } from 'util/reactUtil';
 
-type OuterProps = {
+export type OuterProps = {
     afterLift?: () => any
 }
 
-type InnerProps = {
+export type InnerProps = {
     store: Store,
     ready: Promise<void>,
     children?: ReactNode

@@ -4,29 +4,33 @@ import { Reducer, combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 import * as modules from '../modules';
 import _ from 'lodash';
+import { StoreOptions } from './createStore';
+import AsyncStorage from '@react-native-community/async-storage';
+import * as reduxPersist from 'redux-persist';
 
-const lookup = new WeakMap<Reducer, string[]/*{ [key: string]: Reducer }*/>();
-
-export default (reducers: any) => {
-  const allReducers = ({
+export default (runtimeReducers: any, options: StoreOptions) => {
+  const reducers = ({
     // reducers added at runtime
-    ...reducers,
+    ...runtimeReducers,
     // reducers known at compiletime
     form,
     // reducers from modules
     ..._.mapValues(modules, (v) => v.default),
   });
 
-  const rootReducer = combineReducers(allReducers);
+  let rootReducer: Reducer = combineReducers(reducers);
 
-  lookup.set(rootReducer, Object.keys(allReducers));
+
+  if (options.persistStore) {
+    const persistConfig = {
+      key:       'root',
+      storage:   AsyncStorage,
+      blacklist: Object.keys(reducers), // blacklisting everything for now
+    };
+
+    rootReducer = reduxPersist.persistReducer(persistConfig, rootReducer);
+  }
 
   return rootReducer;
-};
 
-export const getReducerKeys = (root: Reducer) => {
-  if (!lookup.has(root)) {
-    throw new Error('key not found in lookup map');
-  }
-  return lookup.get(root);
 };
