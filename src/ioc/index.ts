@@ -1,16 +1,16 @@
-import { Container } from 'inversify';
+import { interfaces, Container } from 'inversify';
 import * as modules from 'modules';
 import { createGhostObject } from 'util/ghostObject';
 import emitterModule from './inversify.module';
-import appModule from 'components/App/inversify.module';
+import { AppDependencies } from '../components/App/AppDependencies';
 
-export const container: Container = createGhostObject(() => {
+export const createContainer = (dependencies: AppDependencies): interfaces.Container => createGhostObject(() => {
   const instance = new Container();
 
   instance.load(
-    ...Object.values(modules).map(m => m.containerModule),
+    ...Object.values(modules).map(m => m.containerModule(instance)),
     emitterModule,
-    appModule
+    dependencies
   );
 
   return instance;

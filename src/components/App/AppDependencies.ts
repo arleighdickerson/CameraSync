@@ -11,6 +11,8 @@ import createNavigator from 'routes';
 import createReduxStore, { CreatedStore } from 'store/createStore';
 // import { lazyWrap } from 'util/reactUtil';
 import createApp from './createApp';
+import { createContainer } from 'ioc';
+import { interfaces } from 'inversify';
 
 const mapStateToProps = (state: any) => ({ state: state.nav });
 
@@ -19,6 +21,7 @@ export class AppDependencies extends TokenContainerModule {
     private _AppContainer?: any;
     private _AppWithNavigationState?: any;
     private _App?: any;
+    private _container?: interfaces.Container;
 
     private _createdStoreResult?: CreatedStore;
 
@@ -28,7 +31,7 @@ export class AppDependencies extends TokenContainerModule {
       });
     }
 
-    get AppNavigator() {
+    protected get AppNavigator() {
       if (!this._AppNavigator) {
         this._AppNavigator = createNavigator();
       }
@@ -56,6 +59,13 @@ export class AppDependencies extends TokenContainerModule {
       return this._App;
     }
 
+    get container() {
+      if (!this._container) {
+        this._container = createContainer(this);
+      }
+      return this._container;
+    }
+
     get store() {
       return this.createdStoreResult.store;
     }
@@ -70,7 +80,14 @@ export class AppDependencies extends TokenContainerModule {
 
     private get createdStoreResult() {
       if (!this._createdStoreResult) {
+        const context = {};
+        Object.defineProperty(context, 'container', {
+          get: () => this.container,
+        });
+        const sagaMiddlewareOptions = { context };
+
         this._createdStoreResult = createReduxStore({
+          sagaMiddlewareOptions,
           reducers: {
             nav: createNavigationReducer(this.AppNavigator),
           },

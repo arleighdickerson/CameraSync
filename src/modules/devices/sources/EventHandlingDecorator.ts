@@ -1,7 +1,6 @@
 import { getToken } from 'inversify-token';
-import { postConstruct } from 'inversify';
+import { interfaces, postConstruct } from 'inversify';
 import * as TYPES from 'types';
-import { container } from 'ioc';
 import { DeviceSourceWrapper } from './DeviceSourceWrapper';
 import { isDeviceEvent } from '../models';
 import * as deviceModule from '../actions';
@@ -10,6 +9,12 @@ import { Constructor } from 'util/typeHelpers';
 
 export abstract class EventHandlingDecorator extends DeviceSourceWrapper {
     private _handlers?: { [key: string]: (evt: any) => any };
+
+    abstract get container(): interfaces.Container;
+
+    protected constructor() {
+      super();
+    }
 
     get handlers() {
       if (!this._handlers) {
@@ -30,11 +35,11 @@ export abstract class EventHandlingDecorator extends DeviceSourceWrapper {
     }
 
     get store() {
-      return getToken(container, TYPES.Store);
+      return getToken(this.container, TYPES.Store);
     }
 
     get eventEmitter() {
-      return getToken(container, TYPES.EventSource);
+      return getToken(this.container, TYPES.EventSource);
     }
 
     @postConstruct()
@@ -44,9 +49,13 @@ export abstract class EventHandlingDecorator extends DeviceSourceWrapper {
       });
     }
 
-    static mixin(ctor: Constructor<DeviceSource>): Constructor<EventHandlingDecorator> {
+    static mixin(container: interfaces.Container, ctor: Constructor<DeviceSource>): Constructor<EventHandlingDecorator> {
       return class extends this {
             private readonly _delegate: DeviceSource;
+
+            get container() {
+              return container;
+            }
 
             constructor(...args: any[]) {
               super();

@@ -9,6 +9,7 @@ import {
   Middleware,
 } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { RunSagaOptions } from '@redux-saga/core';
 import * as reduxPersist from 'redux-persist';
 import _ from 'lodash';
 
@@ -22,7 +23,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 export interface StoreConfiguration {
     reducers: { [key: string]: Reducer },
     middleware?: Middleware[],
-    enhancers?: StoreEnhancer[]
+    enhancers?: StoreEnhancer[],
+    sagaMiddlewareOptions?: RunSagaOptions<any, any>
 }
 
 export interface StoreOptions {
@@ -41,10 +43,10 @@ export type CreatedStore = {
     ready: Promise<void>
 }
 
-export default ({ reducers, middleware = [], enhancers = [] }: StoreConfiguration, options?: StoreOptions): CreatedStore => {
+export default ({ reducers, middleware = [], enhancers = [], sagaMiddlewareOptions }: StoreConfiguration, options?: StoreOptions): CreatedStore => {
   const opts = { ...createDefaultOptions(), ...options };
 
-  const sagaMiddleWare = createSagaMiddleware();
+  const sagaMiddleWare = createSagaMiddleware(sagaMiddlewareOptions);
 
   const defaultMiddleware = [
     sagaMiddleWare,

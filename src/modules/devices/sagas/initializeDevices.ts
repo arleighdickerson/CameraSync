@@ -1,11 +1,20 @@
-import { select, all, fork, put, takeEvery } from 'redux-saga/effects';
+import {
+  select,
+  all,
+  fork,
+  put,
+  takeEvery,
+  getContext,
+} from 'redux-saga/effects';
 
-import { container } from 'ioc';
 import { getToken } from 'inversify-token';
 import * as TYPES from 'types';
 import * as deviceActions from '../actions';
 
 function* fetchDevices() {
+  // !!! we can dispose of the singleton ioc container
+  // will now scope to AppDependencies object !!!
+  const container = yield getContext('container');
   const deviceSource = getToken(container, TYPES.DeviceSource);
   const deviceList = yield deviceSource.fetchAll();
   yield put(deviceActions.attachAll(deviceList));

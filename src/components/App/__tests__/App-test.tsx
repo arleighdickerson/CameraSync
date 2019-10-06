@@ -2,8 +2,7 @@
  * @format
  */
 import React from 'react';
-import App from '../';
-import dependencies from '../inversify.module';
+import { AppDependencies } from '../AppDependencies';
 
 // Note: test renderer must be required after react-native.
 import { create, act } from 'react-test-renderer';
@@ -11,8 +10,9 @@ import { create, act } from 'react-test-renderer';
 jest.mock('NativeAnimatedHelper');
 
 it('renders correctly', async () => {
+  const dependencies = new AppDependencies();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const renderer = create(<App/>);
+  const renderer = create(<dependencies.App/>);
 
   act(() => {
     const state = dependencies.store.getState();

@@ -1,4 +1,4 @@
-import { container } from 'ioc';
+import { AppDependencies } from 'components/App/AppDependencies';
 
 class TestClass {
     private static _id: number = 0;
@@ -12,6 +12,8 @@ class TestClass {
 }
 
 it('should handle factory-created singletons', () => {
+  const dependencies = new AppDependencies();
+  const { container } = dependencies;
   const identifier = Symbol.for('TestClass');
   container.bind(identifier)
     .toDynamicValue(() => new TestClass())

@@ -4,11 +4,13 @@ import { NativeDeviceSource } from './sources/NativeDeviceSource';
 import { MockDeviceSource } from './sources/MockDeviceSource';
 import { EventHandlingDecorator } from './sources/EventHandlingDecorator';
 import { isTest } from 'util/env';
+import { interfaces } from 'inversify';
 
 // @see https://github.com/mscharley/inversify-token#usage
 
-export default new TokenContainerModule((bindToken) => {
+export default (container: interfaces.Container) => new TokenContainerModule((bindToken) => {
   const Class = EventHandlingDecorator.mixin(
+    container,
     isTest
       ? MockDeviceSource
       : NativeDeviceSource

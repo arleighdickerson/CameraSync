@@ -1,3 +1,3 @@
-import dependencies from './inversify.module';
+import { AppDependencies } from './AppDependencies';
 
-export default dependencies.App;
+export default new AppDependencies().App;
