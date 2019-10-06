@@ -4,7 +4,7 @@ import { Reducer, combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 import * as modules from '../modules';
 import _ from 'lodash';
-import { DependencyOptions } from 'components/App';
+import { DependencyOptions } from 'App';
 import * as reduxPersist from 'redux-persist';
 
 export default (runtimeReducers: any, options: DependencyOptions) => {

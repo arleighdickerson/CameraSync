@@ -1,7 +1,11 @@
 import { createReducer } from 'typesafe-actions';
-import { attach, attachAll, detach, detachAll } from './actions';
+import {
+  attach,
+  attachAll,
+  detach,
+  detachAll,
+} from './actions';
 import { DeviceList } from './models';
-
 function cloneDeviceList(deviceList: DeviceList): DeviceList {
   const newState: DeviceState = {};
   Object.keys(deviceList).forEach(key => {
@@ -10,7 +14,7 @@ function cloneDeviceList(deviceList: DeviceList): DeviceList {
   return newState;
 }
 
-type DeviceState = DeviceList | null
+export type DeviceState = DeviceList | null
 const initialState: DeviceState = null;
 
 export default createReducer(initialState as DeviceState)
@@ -34,3 +38,19 @@ export default createReducer(initialState as DeviceState)
     return newState;
   });
 
+/*
+  .handleAction(changeActiveDevice, (state, action) => {
+    const key = action.payload.deviceName;
+    const tempState = cloneDeviceList(state || {});
+
+    const activeDevice = tempState[key];
+    delete tempState[key];
+
+    const newState: DeviceState = { [key]: activeDevice };
+    Object.entries(tempState).forEach(([k, v]) => {
+      newState[k] = v;
+    });
+
+    return newState;
+  });
+ */

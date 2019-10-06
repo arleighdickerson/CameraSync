@@ -2,7 +2,7 @@
  * @format
  */
 import React from 'react';
-import App, { AppDependencies } from 'components/App';
+import App, { AppDependencies } from 'App/index';
 
 // Note: test renderer must be required after react-native.
 import { create, act } from 'react-test-renderer';

@@ -3,7 +3,7 @@ import { EventEmitter as EventSource } from 'events';
 import { PermissionSource } from 'modules/permissions/sources/PermissionSource';
 import { DeviceSource } from 'modules/devices/sources/DeviceSource';
 import { Store } from 'redux';
-import { AppDependencies, DependencyOptions } from 'components/App';
+import { AppDependencies, DependencyOptions } from 'App';
 
 const PermissionSourceToken = new Token<PermissionSource>(Symbol.for('PermissionSource'));
 type PermissionSourceToken = TokenType<typeof PermissionSourceToken>

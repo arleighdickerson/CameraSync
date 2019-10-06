@@ -1,12 +1,15 @@
 import * as reactNavigation from 'react-navigation';
-import DeviceStack from './DeviceStack';
+import Home from 'routes/Home';
+import Commit from 'routes/Commit';
 
 export const createNavigator = () => reactNavigation.createSwitchNavigator({
-  DeviceStack: {
-    screen: DeviceStack,
-    // navigationOptions: { backBehavior: 'none' },
+  Home: {
+    screen: Home,
+  },
+  Commit: {
+    screen: Commit,
   },
 }, {
-  initialRouteName: 'DeviceStack',
+  initialRouteName: 'Home',
   backBehavior:     'none',
 });

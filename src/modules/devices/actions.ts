@@ -6,11 +6,12 @@ import { makeTypes } from 'util/typeHelpers';
 import { DeviceList, DeviceInfo } from './models';
 
 const types = makeTypes({
-  INIT_DEVICE_LIST:   null,
-  ATTACH_ALL_DEVICES: null,
-  DETACH_ALL_DEVICES: null,
-  ATTACH_DEVICE:      null,
-  DETACH_DEVICE:      null,
+  INIT_DEVICE_LIST:     null,
+  ATTACH_ALL_DEVICES:   null,
+  DETACH_ALL_DEVICES:   null,
+  ATTACH_DEVICE:        null,
+  DETACH_DEVICE:        null,
+  CHANGE_ACTIVE_DEVICE: null,
 }, (v, k) => 'devices/' + k);
 
 export { types as actionTypes };
@@ -33,3 +34,10 @@ export const detach = createStandardAction(types.DETACH_DEVICE).map(
   })
 );
 
+/*
+export const changeActiveDevice = createStandardAction(types.CHANGE_ACTIVE_DEVICE).map(
+  (deviceName: string): { payload: { deviceName: string } } => ({
+    payload: { deviceName },
+  })
+);
+*/
