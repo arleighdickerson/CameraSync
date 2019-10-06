@@ -6,7 +6,7 @@
     "start": "react-native start",
     "remotedev": "remotedev --hostname=localhost --port=8000",
     "test": "jest",
-    "lint": "eslint --ext .js --ext .ts --ext .d.ts ."
+    "lint": "./lint.sh"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
@@ -63,6 +63,6 @@
     "remote-redux-devtools": "^0.5.16",
     "remotedev-server": "^0.3.1",
     "ts-jest": "24.1.0",
-    "typescript": "3.6.3"
+    "typescript": "3.5.3"
   }
 }

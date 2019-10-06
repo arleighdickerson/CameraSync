@@ -982,8 +982,10 @@ declare module '@react-navigation/core' {
     }
 
     export namespace Themed {
+        /* eslint-disable no-shadow */
         export const StatusBar: React.ComponentType<ThemedStatusBarProps>;
         export const Text: React.ComponentType<ThemedTextProps>;
         export const TextInput: React.ComponentType<ThemedTextInputProps>;
+        /* eslint-enable no-shadow */
     }
 }

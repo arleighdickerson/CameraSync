@@ -1,3 +1,3 @@
-import CommitList from "./CommitList";
+import CommitList from './CommitList';
 
 export default CommitList;

@@ -2,8 +2,8 @@
  * @format
  */
 import React from 'react';
-import App from '../'
-import AppDependencies from "ioc/AppDependencies";
+import App from '../';
+import AppDependencies from 'ioc/AppDependencies';
 
 // Note: test renderer must be required after react-native.
 import { create, act } from 'react-test-renderer';

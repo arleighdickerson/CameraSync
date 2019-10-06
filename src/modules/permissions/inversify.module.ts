@@ -6,9 +6,10 @@ import { MockPermissionSource } from './sources/MockPermissionSource';
 import { interfaces } from 'inversify';
 
 
-// @see https://github.com/mscharley/inversify-token#usage
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (container: interfaces.Container) => new TokenContainerModule((bindToken) => {
 
+  // @see https://github.com/mscharley/inversify-token#usage
   bindToken(TYPES.PermissionSource)
     .to(isTest ? MockPermissionSource : NativePermissionSource)
     .inSingletonScope();
