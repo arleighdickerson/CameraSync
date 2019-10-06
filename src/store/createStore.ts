@@ -7,18 +7,23 @@ import {
   Reducer,
   StoreEnhancer,
   Middleware,
+  compose,
 } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { RunSagaOptions } from '@redux-saga/core';
 import * as reduxPersist from 'redux-persist';
 import _ from 'lodash';
 
-import createComposer from './createComposer';
 import createReducer, { getReducerKeys } from './createReducer';
 import rootSaga from './rootSaga';
 import Deferred from 'util/Deferred';
 
 import AsyncStorage from '@react-native-community/async-storage';
+
+const createComposer = __DEV__
+  ? require('remote-redux-devtools').composeWithDevTools
+  : () => compose;
+
 
 export interface StoreConfiguration {
     reducers: { [key: string]: Reducer },
@@ -52,8 +57,10 @@ export default ({ reducers, middleware = [], enhancers = [], sagaMiddlewareOptio
     sagaMiddleWare,
   ];
 
-  const compose = createComposer(opts.devTools, {
-    port: 8000,
+  const compose = createComposer({
+    port:     8000,
+    realtime: __DEV__ && process.env.NODE_ENV !== 'test',
+    // secure: true,
   });
 
   const enhancer = compose(
