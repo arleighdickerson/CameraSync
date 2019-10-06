@@ -1,25 +1,22 @@
-import { AppDependencies } from './AppDependencies';
-import { Store } from 'redux';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import PersistGate from '../PersistGate';
-import Splash from '../Splash';
-import { OuterProps } from './Wrapper';
-import { createGhostObject, singletonize } from '../../util/ghostObject';
 
-export type Props = {
-    dependencies: AppDependencies
-} & OuterProps
+import PersistGate from 'components/PersistGate';
+import Splash from 'components/Splash';
+import { createGhostObject } from 'util/ghostObject';
 
+import Dependencies from './Dependencies';
 
-const Content = (props: { dependencies: AppDependencies }) => {
+import { Props } from './index';
+
+const Content = (props: { dependencies: Dependencies }) => {
   const { AppWithNavigationState } = props.dependencies;
   return <AppWithNavigationState/>;
 };
 
-export default class App extends React.PureComponent<Props> {
+export default class RootContainer extends React.PureComponent<Props> {
     static defaultProps = createGhostObject(() => ({
-      dependencies: new AppDependencies(),
+      dependencies: new Dependencies(),
     }));
 
     render() {

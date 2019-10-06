@@ -1,7 +1,7 @@
 import * as reactNavigation from 'react-navigation';
 import DeviceStack from './DeviceStack';
 
-const routes = () => reactNavigation.createSwitchNavigator({
+export const createNavigator = () => reactNavigation.createSwitchNavigator({
   DeviceStack: {
     screen: DeviceStack,
     // navigationOptions: { backBehavior: 'none' },
@@ -10,5 +10,3 @@ const routes = () => reactNavigation.createSwitchNavigator({
   initialRouteName: 'DeviceStack',
   backBehavior:     'none',
 });
-
-export default routes;

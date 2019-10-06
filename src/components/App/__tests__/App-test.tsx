@@ -2,7 +2,7 @@
  * @format
  */
 import React from 'react';
-import { AppDependencies } from '../AppDependencies';
+import App, { AppDependencies } from 'components/App';
 
 // Note: test renderer must be required after react-native.
 import { create, act } from 'react-test-renderer';
@@ -12,7 +12,7 @@ jest.mock('NativeAnimatedHelper');
 it('renders correctly', async () => {
   const dependencies = new AppDependencies();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const renderer = create(<dependencies.App/>);
+  const renderer = create(<App dependencies={dependencies}/>);
 
   act(() => {
     const state = dependencies.store.getState();

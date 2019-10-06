@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
 import _createSagaMiddleware from 'redux-saga';
 import {
@@ -12,32 +13,39 @@ import {
   Reducer,
   Middleware,
   StoreEnhancer,
-  applyMiddleware,
+  applyMiddleware, Store,
 } from 'redux';
 import * as TYPES from 'types';
-import createNavigator from 'routes';
-import { CreatedStore, StoreOptions } from 'store/createStore';
-import createContainer from 'ioc/createContainer';
-import { wrap as createApp } from './Wrapper';
-import createReducer from '../../store/createReducer';
-import { compose } from 'store/createComposer';
-import Deferred from '../../util/Deferred';
+import { createNavigator } from 'routes';
+import { createContainer } from 'ioc';
+import { DependencyOptions } from './index';
+import Deferred from 'util/Deferred';
 import * as reduxPersist from 'redux-persist';
 import _ from 'lodash';
-import rootSaga from '../../store/rootSaga';
+import { rootSaga, createReducer, createComposer } from 'store';
 
-
-type DependencyOptions = {
-    navReducerKey: string
+type CreatedStore = {
+    store: Store,
+    persistor: reduxPersist.Persistor | null,
+    ready: Promise<void>
 }
 
-const defaults = {
-  navReducerKey: 'nav',
+const defaults: DependencyOptions = {
+  navReducerKey:  'nav',
+  devToolOptions: {
+    port:     8000,
+    realtime: process.env.NODE_ENV !== 'test',
+  },
+  persistConfig: {
+    key:       'root',
+    storage:   AsyncStorage,
+    whitelist: [], // nopping for now
+  },
 };
 
 type ReducerMap = { [key: string]: Reducer }
 
-export class AppDependencies extends TokenContainerModule {
+export default class DependencyHandler {
     private readonly navReducerKey: string;
     private readonly mapStateToProps: (state: any) => any;
 
@@ -57,25 +65,28 @@ export class AppDependencies extends TokenContainerModule {
 
     private _createdStoreResult?: CreatedStore;
 
+    protected readonly containerModule = new TokenContainerModule(
+      bindToken => {
+        bindToken(TYPES.Store).toDynamicValue(() => this.store).inSingletonScope();
+      }
+    );
+
 
     constructor(protected readonly options: DependencyOptions = defaults) {
-      super(bindToken => {
-        bindToken(TYPES.Store).toDynamicValue(() => this.store).inSingletonScope();
-      });
 
       const { navReducerKey } = options;
       this.navReducerKey = navReducerKey;
       this.mapStateToProps = (state: any) => ({ state: state[navReducerKey] });
     }
 
-    protected get AppNavigator() {
+    get AppNavigator() {
       if (!this._AppNavigator) {
         this._AppNavigator = createNavigator();
       }
       return this._AppNavigator;
     }
 
-    protected get AppContainer() {
+    get AppContainer() {
       if (!this._AppContainer) {
         this._AppContainer = createReduxContainer(this.AppNavigator);
       }
@@ -89,23 +100,16 @@ export class AppDependencies extends TokenContainerModule {
       return this._AppWithNavigationState;
     }
 
-    get App() {
-      if (!this._App) {
-        this._App = createApp(this.AppWithNavigationState, this);
-      }
-      return this._App;
-    }
-
     get container() {
       if (!this._container) {
-        this._container = createContainer(this);
+        this._container = createContainer(this.containerModule);
       }
       return this._container;
     }
 
     get rootReducer() {
       if (!this._rootReducer) {
-        this._rootReducer = createReducer(this.reducers, this.storeOptions);
+        this._rootReducer = createReducer(this.reducers, this.options);
       }
       return this._rootReducer;
     }
@@ -139,16 +143,10 @@ export class AppDependencies extends TokenContainerModule {
 
     get rootEnhancer() {
       if (!this._rootEnhancer) {
+        const compose = createComposer(this.options.devToolOptions);
         this._rootEnhancer = compose(applyMiddleware(...this.middleware), ...this.enhancers);
       }
       return this._rootEnhancer;
-    }
-
-    get storeOptions(): StoreOptions {
-      return {
-        devTools:     true,
-        persistStore: true,
-      };
     }
 
     get store() {
@@ -170,7 +168,7 @@ export class AppDependencies extends TokenContainerModule {
         let ready: Promise<void> = Promise.resolve();
         let persistor = null;
 
-        if (this.storeOptions.persistStore) {
+        if (this.options.persistConfig) {
 
           const deferred: Deferred<void> = new Deferred();
           ready = deferred.promise;
@@ -212,5 +210,4 @@ export class AppDependencies extends TokenContainerModule {
       const sagaMiddlewareOptions = { context };
       return _createSagaMiddleware(sagaMiddlewareOptions);
     }
-
 }

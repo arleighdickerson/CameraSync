@@ -4,13 +4,12 @@ import { Reducer, combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 import * as modules from '../modules';
 import _ from 'lodash';
-import { StoreOptions } from './createStore';
-import AsyncStorage from '@react-native-community/async-storage';
+import { DependencyOptions } from 'components/App';
 import * as reduxPersist from 'redux-persist';
 
-export default (runtimeReducers: any, options: StoreOptions) => {
+export default (runtimeReducers: any, options: DependencyOptions) => {
   const reducers = ({
-    // reducers added at runtime
+    // reducers to be added at runtime
     ...runtimeReducers,
     // reducers known at compiletime
     form,
@@ -21,14 +20,8 @@ export default (runtimeReducers: any, options: StoreOptions) => {
   let rootReducer: Reducer = combineReducers(reducers);
 
 
-  if (options.persistStore) {
-    const persistConfig = {
-      key:       'root',
-      storage:   AsyncStorage,
-      blacklist: Object.keys(reducers), // blacklisting everything for now
-    };
-
-    rootReducer = reduxPersist.persistReducer(persistConfig, rootReducer);
+  if (options.persistConfig) {
+    rootReducer = reduxPersist.persistReducer(options.persistConfig, rootReducer);
   }
 
   return rootReducer;

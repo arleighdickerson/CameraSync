@@ -18,7 +18,7 @@ const DeviceStack = createStackNavigator({
     navigationOptions: {
       gesturesEnabled: false,
     },
-     */
+   */
 });
 
 export default DeviceStack;
