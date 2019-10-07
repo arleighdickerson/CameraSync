@@ -1,1 +1,4 @@
-export { colors as default } from 'react-native-elements';
+import { colors } from 'react-native-elements';
+
+export default colors;
+

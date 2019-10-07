@@ -5,11 +5,13 @@ import Commit from 'routes/Commit';
 export const createNavigator = () => reactNavigation.createSwitchNavigator({
   Home: {
     screen: Home,
+    path:   '/',
   },
   Commit: {
     screen: Commit,
+    path:   '/commit',
   },
 }, {
   initialRouteName: 'Home',
-  backBehavior:     'none',
+  backBehavior:     'initialRoute',
 });

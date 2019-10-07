@@ -1,5 +1,6 @@
 import { StyleProp } from 'react-native';
 
+
 export const container: StyleProp<any> = {
   alignItems:      'center',
   backgroundColor: '#fff',

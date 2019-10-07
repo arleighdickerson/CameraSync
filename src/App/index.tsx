@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import PersistGate from 'components/PersistGate';
 import Splash from 'components/Splash';
 import { createGhostObject } from 'util/ghostObject';
-
 import AppDependencies from 'ioc/AppDependencies';
 
 export type Props = {
