@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import * as styles from 'assets/shared.styles';
-import withHeader from 'components/withHeader';
 
 const CommitList = () => (
   <View style={styles.container}>
@@ -11,5 +10,4 @@ const CommitList = () => (
 );
 
 // @ts-ignore
-export default withHeader({ title: 'Commits' })(CommitList);
-
+export default CommitList
