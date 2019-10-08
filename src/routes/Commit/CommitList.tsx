@@ -10,4 +10,4 @@ const CommitList = () => (
 );
 
 // @ts-ignore
-export default CommitList
+export default CommitList;

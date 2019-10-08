@@ -4,6 +4,7 @@ import android.hardware.usb.UsbDevice;
 import android.mtp.MtpEvent;
 import android.mtp.MtpObjectInfo;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -47,6 +48,14 @@ public final class ConversionUtil {
     payload.putInt("param2", event.getParameter2());
     payload.putInt("param3", event.getParameter3());
     return payload;
+  }
+
+  public static WritableArray asWritableArray(Iterable<MtpObjectInfo> results) {
+    WritableArray array = Arguments.createArray();
+    results.forEach(result -> {
+      array.pushMap(asWritableMap(result));
+    });
+    return array;
   }
 
   public static WritableMap asWritableMap(MtpObjectInfo mtpObjectInfo) {

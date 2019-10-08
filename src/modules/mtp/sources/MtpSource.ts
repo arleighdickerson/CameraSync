@@ -1,4 +1,6 @@
+import { MtpObjectInfo } from 'modules/mtp/models';
+
 export interface MtpSource {
     readonly EVENT_MTP_SCAN: string;
-    sync: () => Promise<true>
+    scan: () => Promise<MtpObjectInfo[]>
 }

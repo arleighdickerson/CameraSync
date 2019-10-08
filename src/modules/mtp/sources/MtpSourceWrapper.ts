@@ -10,7 +10,7 @@ export abstract class MtpSourceWrapper implements MtpSource {
     }
 
 
-    sync() {
-      return this.delegate.sync();
+    scan() {
+      return this.delegate.scan();
     }
 }
