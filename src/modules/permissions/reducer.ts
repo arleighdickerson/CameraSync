@@ -50,4 +50,3 @@ export default createReducer(cloneState(initialState) as PermissionsState)
   .handleAction(actions.forgetAllDevices, (state) => {
     return { devices: {}, storage: state.storage };
   });
-

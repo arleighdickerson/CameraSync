@@ -1,11 +1,9 @@
 package com.camerasync.util;
 
-import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.mtp.MtpEvent;
 import android.mtp.MtpObjectInfo;
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,6 +46,16 @@ public final class ConversionUtil {
     payload.putInt("param1", event.getParameter1());
     payload.putInt("param2", event.getParameter2());
     payload.putInt("param3", event.getParameter3());
+    return payload;
+  }
+
+  public static WritableMap asWritableMap(MtpObjectInfo mtpObjectInfo) {
+    WritableMap payload = Arguments.createMap();
+
+    payload.putString("name", mtpObjectInfo.getName());
+    payload.putInt("dateCreated", (int) mtpObjectInfo.getDateCreated());
+    payload.putInt("dateModified", (int) mtpObjectInfo.getDateModified());
+
     return payload;
   }
 }

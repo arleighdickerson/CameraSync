@@ -2,14 +2,14 @@ import * as TYPES from 'types';
 import { TokenContainerModule } from 'inversify-token';
 import { NativeDeviceSource } from './sources/NativeDeviceSource';
 import { MockDeviceSource } from './sources/MockDeviceSource';
-import { EventHandlingDecorator } from './sources/EventHandlingDecorator';
+import { DeviceEventHandlingDecorator } from './sources/DeviceEventHandlingDecorator';
 import { isTest } from 'util/env';
 import { interfaces } from 'inversify';
 
 // @see https://github.com/mscharley/inversify-token#usage
 
 export default (container: interfaces.Container) => new TokenContainerModule((bindToken) => {
-  const Class = EventHandlingDecorator.mixin(
+  const Class = DeviceEventHandlingDecorator.mixin(
     container,
     isTest
       ? MockDeviceSource

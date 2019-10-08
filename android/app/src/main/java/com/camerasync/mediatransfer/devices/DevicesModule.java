@@ -3,6 +3,7 @@ package com.camerasync.mediatransfer.devices;
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Environment;
 import com.camerasync.ApplicationTerminatedEvent;
 import com.camerasync.util.ConversionUtil;
 import com.facebook.react.bridge.Arguments;
@@ -12,6 +13,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -179,6 +181,14 @@ public class DevicesModule extends ReactContextBaseJavaModule {
         return E_DEVICE_MISSING;
       }
 
+      private File getDestDir() {
+        // put pictures from SLR here
+        return new File(
+          new File(Environment.getExternalStorageDirectory(), "DCIM"),
+          "Camera"
+        );
+      }
+
       @Override
       public WritableMap getUserInfo() {
         WritableMap userInfo = Arguments.createMap();
@@ -187,5 +197,4 @@ public class DevicesModule extends ReactContextBaseJavaModule {
       }
     }
   }
-
 }

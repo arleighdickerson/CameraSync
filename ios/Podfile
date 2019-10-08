@@ -30,7 +30,6 @@ target 'CameraSync' do
 
 
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'CameraSyncTests' do
     inherit! :search_paths

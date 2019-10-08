@@ -20,3 +20,10 @@ export function makeTypes<T, V>(typeEnum: T, factory?: Factory<T, V>): Types<T, 
 
   return Object.freeze(types);
 }
+
+export function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
+  return o.reduce((res, key) => {
+    res[key] = key;
+    return res;
+  }, Object.create(null));
+}

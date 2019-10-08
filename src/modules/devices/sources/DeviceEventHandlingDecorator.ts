@@ -7,7 +7,7 @@ import * as deviceModule from '../actions';
 import { DeviceSource } from './DeviceSource';
 import { Constructor } from 'util/typeHelpers';
 
-export abstract class EventHandlingDecorator extends DeviceSourceWrapper {
+export abstract class DeviceEventHandlingDecorator extends DeviceSourceWrapper {
     private _handlers?: { [key: string]: (evt: any) => any };
 
     abstract get container(): interfaces.Container;
@@ -49,7 +49,7 @@ export abstract class EventHandlingDecorator extends DeviceSourceWrapper {
       });
     }
 
-    static mixin(container: interfaces.Container, ctor: Constructor<DeviceSource>): Constructor<EventHandlingDecorator> {
+    static mixin(container: interfaces.Container, ctor: Constructor<DeviceSource>): Constructor<DeviceEventHandlingDecorator> {
       return class extends this {
             private readonly _delegate: DeviceSource;
 
