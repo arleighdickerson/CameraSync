@@ -2,7 +2,7 @@ package com.camerasync.mediatransfer.mtp;
 
 import android.mtp.MtpDevice;
 import android.mtp.MtpObjectInfo;
-import java.util.Collections;
+import android.util.Log;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class ObjectScanner {
         scanObjectsInStorage(mtpDevice, results, storageId, 0, 0);
       }
     }
-    int a = results.size();
-    return Collections.emptyList();
+
+    return results;
   }
 
   private static void scanObjectsInStorage(
@@ -46,7 +46,7 @@ public class ObjectScanner {
         continue;
       }
 
-      results.add(mtpObjectInfo);
+      Log.i("ObjectScanner", mtpObjectInfo.getName());
     }
   }
 }
