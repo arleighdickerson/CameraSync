@@ -21,6 +21,7 @@ import com.facebook.react.modules.core.PermissionListener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -88,7 +89,7 @@ public class PermissionsModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void authorizeDevice(String deviceName, Promise p) {
-    devicesModule.doWithDevice(deviceName, p, device -> requestUsbPermission(device, p));
+    devicesModule.doWithDevice(deviceName, p, device -> requestUsbPermission(device, p::resolve));
   }
 
   private void requestStoragePermission(Promise p) {
@@ -111,7 +112,7 @@ public class PermissionsModule extends ReactContextBaseJavaModule {
     );
   }
 
-  private void requestUsbPermission(UsbDevice device, Promise p) {
+  public void requestUsbPermission(UsbDevice device, Consumer<Boolean> consumer) {
     final int requestCode = REQUEST_CODE_USB_PERMISSION;
     final String actionName = ACTION_USB_PERMISSION;
 
@@ -132,7 +133,7 @@ public class PermissionsModule extends ReactContextBaseJavaModule {
       @Override
       public void onReceive(Context context, Intent intent) {
         if (actionName.equals(intent.getAction())) {
-          p.resolve(
+          consumer.accept(
             intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
           );
         }

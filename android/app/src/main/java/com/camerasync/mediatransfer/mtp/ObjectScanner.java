@@ -1,15 +1,17 @@
 package com.camerasync.mediatransfer.mtp;
 
+import android.mtp.MtpConstants;
 import android.mtp.MtpDevice;
 import android.mtp.MtpObjectInfo;
 import android.util.Log;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class ObjectScanner {
 
-  public static List<MtpObjectInfo> scanObjectsInStorage(MtpDevice mtpDevice) {
-    List<MtpObjectInfo> results = new LinkedList<>();
+  public static void scanObjectsInStorage(
+    MtpDevice mtpDevice,
+    Consumer<MtpObjectInfo> consumer
+  ) {
 
     // acquire storage IDs in the MTP device
     int[] storageIds = mtpDevice.getStorageIds();
@@ -17,16 +19,14 @@ public class ObjectScanner {
     // scan each storage
     if (storageIds != null) {
       for (int storageId : storageIds) {
-        scanObjectsInStorage(mtpDevice, results, storageId, 0, 0);
+        scanObjectsInStorage(mtpDevice, consumer, storageId, 0, -1);
       }
     }
-
-    return results;
   }
 
   private static void scanObjectsInStorage(
     MtpDevice mtpDevice,
-    List<MtpObjectInfo> results,
+    Consumer<MtpObjectInfo> consumer,
     int storageId,
     int format,
     int parent
@@ -46,7 +46,25 @@ public class ObjectScanner {
         continue;
       }
 
-      Log.i("ObjectScanner", mtpObjectInfo.getName());
-    }
+      consumer.accept(mtpObjectInfo);
+
+      scanObjectsInStorage(mtpDevice,consumer,storageId,format,mtpObjectInfo.getObjectHandle());
+
+      // consumer.accept(mtpObjectInfo);
+
+      // int associationType = mtpObjectInfo.getAssociationType();
+
+      // if (associationType == MtpConstants.ASSOCIATION_TYPE_GENERIC_FOLDER) {
+        // scan the children recursively
+        // scanObjectsInStorage(mtpDevice, consumer, storageId, format, objectHandle);
+        // continue;
+      }
+      // if (
+      // @formatter:off
+        // mtpObjectInfo.getFormat() == MtpConstants.FORMAT_EXIF_JPEG
+        // && mtpObjectInfo.getProtectionStatus() != MtpConstants.PROTECTION_STATUS_NON_TRANSFERABLE_DATA
+        // @formatter:on
+      // ) {
+    // }
   }
 }

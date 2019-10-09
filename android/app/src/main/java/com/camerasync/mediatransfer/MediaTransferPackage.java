@@ -1,7 +1,7 @@
 package com.camerasync.mediatransfer;
 
-import com.camerasync.mediatransfer.mtp.MtpModule;
 import com.camerasync.mediatransfer.devices.DevicesModule;
+import com.camerasync.mediatransfer.mtp.MtpModule;
 import com.camerasync.mediatransfer.permissions.PermissionsModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
@@ -26,7 +26,7 @@ public class MediaTransferPackage implements ReactPackage {
   public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
     DevicesModule devicesModule = new DevicesModule(reactContext);
     PermissionsModule permissionsModule = new PermissionsModule(reactContext, devicesModule);
-    MtpModule mtpModule = new MtpModule(reactContext, devicesModule);
+    MtpModule mtpModule = new MtpModule(reactContext, devicesModule, permissionsModule);
 
     List<NativeModule> modules = new ArrayList<>();
 

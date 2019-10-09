@@ -41,11 +41,14 @@ const defaults: DependencyOptions = {
     port:     8000,
     realtime: process.env.NODE_ENV !== 'test',
   },
+    /*
   persistConfig: {
     key:       'root',
     storage:   AsyncStorage,
     whitelist: [], // nopping for now
   },
+
+     */
 };
 
 type ReducerMap = { [key: string]: Reducer }
