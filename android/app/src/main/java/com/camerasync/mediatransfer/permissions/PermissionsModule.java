@@ -68,7 +68,7 @@ public class PermissionsModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void authorizeStorage(Promise p) {
-    requestStoragePermission(p);
+    requestStoragePermission(p::resolve);
   }
 
 
@@ -92,12 +92,12 @@ public class PermissionsModule extends ReactContextBaseJavaModule {
     devicesModule.doWithDevice(deviceName, p, device -> requestUsbPermission(device, p::resolve));
   }
 
-  private void requestStoragePermission(Promise p) {
+  public void requestStoragePermission(Consumer<Boolean> consumer) {
     final int requestCode = REQUEST_CODE_STORAGE_PERMISSION;
 
     final PermissionListener listener = (int resultCode, String[] permissions, int[] grantResults) -> {
       if (resultCode == requestCode && permissions[0].equals(permission.WRITE_EXTERNAL_STORAGE)) {
-        p.resolve(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+        consumer.accept(grantResults[0] == PackageManager.PERMISSION_GRANTED);
         return true;
       }
       return false;

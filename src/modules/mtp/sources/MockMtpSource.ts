@@ -9,4 +9,8 @@ export class MockMtpSource implements MtpSource {
     scan(): Promise<MtpObjectInfo[]> {
       return Promise.resolve([]);
     }
+
+    copyOne() {
+      return Promise.resolve(true);
+    }
 }

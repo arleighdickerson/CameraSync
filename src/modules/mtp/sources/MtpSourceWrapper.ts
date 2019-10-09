@@ -13,4 +13,8 @@ export abstract class MtpSourceWrapper implements MtpSource {
     scan() {
       return this.delegate.scan();
     }
+
+    copyOne(){
+        return this.delegate.copyOne();
+    }
 }

@@ -24,8 +24,20 @@ function* startScan() {
   }
 }
 
+
+function* copyOne() {
+  const container = yield getContext('container');
+  const activeDevice: DeviceInfo = yield select(getActiveDevice);
+
+  if (activeDevice) {
+    const mtpSource = getToken(container, TYPES.MtpSource);
+    const info = yield mtpSource.copyOne();
+    console.log(info);
+  }
+}
+
 function* watchForScanRequests() {
-  yield takeEvery(deviceActions.attachAll, startScan);
+  yield takeEvery(deviceActions.attachAll, copyOne);
 }
 
 export default function* imageScan() {
