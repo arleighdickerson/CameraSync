@@ -1,9 +1,7 @@
 package com.camerasync.mediatransfer.mtp;
 
-import android.mtp.MtpConstants;
 import android.mtp.MtpDevice;
 import android.mtp.MtpObjectInfo;
-import android.util.Log;
 import java.util.function.Consumer;
 
 public class ObjectScanner {
@@ -48,23 +46,7 @@ public class ObjectScanner {
 
       consumer.accept(mtpObjectInfo);
 
-      scanObjectsInStorage(mtpDevice,consumer,storageId,format,mtpObjectInfo.getObjectHandle());
-
-      // consumer.accept(mtpObjectInfo);
-
-      // int associationType = mtpObjectInfo.getAssociationType();
-
-      // if (associationType == MtpConstants.ASSOCIATION_TYPE_GENERIC_FOLDER) {
-        // scan the children recursively
-        // scanObjectsInStorage(mtpDevice, consumer, storageId, format, objectHandle);
-        // continue;
-      }
-      // if (
-      // @formatter:off
-        // mtpObjectInfo.getFormat() == MtpConstants.FORMAT_EXIF_JPEG
-        // && mtpObjectInfo.getProtectionStatus() != MtpConstants.PROTECTION_STATUS_NON_TRANSFERABLE_DATA
-        // @formatter:on
-      // ) {
-    // }
+      scanObjectsInStorage(mtpDevice, consumer, storageId, format, mtpObjectInfo.getObjectHandle());
+    }
   }
 }

@@ -8,7 +8,6 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import org.greenrobot.eventbus.EventBus;
@@ -18,7 +17,11 @@ public class MediaTransferPackage implements ReactPackage {
   @Nonnull
   @Override
   public List<ViewManager> createViewManagers(@Nonnull ReactApplicationContext reactContext) {
-    return Collections.emptyList();
+    List<ViewManager> viewManagers = new ArrayList<>();
+
+    viewManagers.add(new MediaTransferImageManager(reactContext));
+
+    return viewManagers;
   }
 
   @Nonnull
