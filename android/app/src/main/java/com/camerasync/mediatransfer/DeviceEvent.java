@@ -1,17 +1,17 @@
-package com.camerasync.mediatransfer.mtp;
+package com.camerasync.mediatransfer;
 
 
-import android.mtp.MtpObjectInfo;
+import android.hardware.usb.UsbDevice;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ImageScanEvent {
+public class DeviceEvent {
 
   public enum Type {
-    MTP_SCAN;
+    DEVICE_ATTACHED, DEVICE_DETACHED;
 
     @Override
     public String toString() {
@@ -22,5 +22,5 @@ public class ImageScanEvent {
   @NonNull
   private final Type type;
   @NonNull
-  private final MtpObjectInfo mtpObjectInfo;
+  private final UsbDevice device;
 }

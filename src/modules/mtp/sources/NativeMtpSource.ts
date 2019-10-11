@@ -9,9 +9,9 @@ export const resolveNativeModule = (() => {
   return (): MtpSource => {
     if (nativeModule === null) {
       // assert(NativeModules, 'react-native.NativeModules apparently not present');
-      const { Mtp } = NativeModules;
+      const { MediaTransfer } = NativeModules;
       // assert(NativeModules, 'react-native.NativeModules.Mtp apparently not present');
-      nativeModule = Mtp;
+      nativeModule = MediaTransfer;
     }
     return <MtpSource>nativeModule;
   };

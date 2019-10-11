@@ -11,5 +11,6 @@ export interface DeviceInfo {
     version: string
     productName: string
     manufacturerName: string
-    deviceName: string
+    deviceName: string,
+    hasPermission: boolean
 }

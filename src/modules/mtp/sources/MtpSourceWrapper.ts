@@ -5,16 +5,23 @@ import { injectable } from 'inversify';
 export abstract class MtpSourceWrapper implements MtpSource {
     protected abstract get delegate(): MtpSource;
 
-    get EVENT_MTP_SCAN() {
-      return this.delegate.EVENT_MTP_SCAN;
+    get EVENT_DEVICE_ATTACHED() {
+      return this.delegate.EVENT_DEVICE_ATTACHED;
     }
 
-
-    scan() {
-      return this.delegate.scan();
+    get EVENT_DEVICE_DETACHED() {
+      return this.delegate.EVENT_DEVICE_DETACHED;
     }
 
-    copyOne(){
-        return this.delegate.copyOne();
+    getDeviceInfo() {
+      return this.delegate.getDeviceInfo();
+    }
+
+    requestDevicePermission() {
+      return this.delegate.requestDevicePermission();
+    }
+
+    getObjectHandles() {
+      return this.delegate.getObjectHandles();
     }
 }

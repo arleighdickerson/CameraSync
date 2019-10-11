@@ -1,8 +1,8 @@
 package com.camerasync;
 
 import android.util.Log;
-import com.camerasync.mediatransfer.devices.DeviceEvent;
-import com.camerasync.mediatransfer.devices.DeviceEvent.Type;
+import com.camerasync.mediatransfer.DeviceEvent;
+import com.camerasync.mediatransfer.DeviceEvent.Type;
 import com.camerasync.util.UsbAttachmentListener;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

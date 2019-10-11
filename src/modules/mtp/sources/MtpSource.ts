@@ -1,7 +1,9 @@
-import { MtpObjectInfo } from 'modules/mtp/models';
+import { MtpObjectInfo,DeviceInfo } from '../models';
 
 export interface MtpSource {
-    readonly EVENT_MTP_SCAN: string;
-    scan: () => Promise<MtpObjectInfo[]>
-    copyOne: () => Promise<boolean>
+    readonly EVENT_DEVICE_ATTACHED: string;
+    readonly EVENT_DEVICE_DETACHED: string;
+    getDeviceInfo: () => Promise<DeviceInfo | null>
+    requestDevicePermission: () => Promise<boolean>,
+    getObjectHandles: () => Promise<MtpObjectInfo[]>
 }

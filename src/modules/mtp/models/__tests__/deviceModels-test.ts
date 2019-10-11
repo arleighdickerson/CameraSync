@@ -1,8 +1,6 @@
 import {
   DeviceInfo,
   isDeviceInfo,
-  DeviceList,
-  isDeviceList,
   DeviceEvent,
   isDeviceEvent,
 } from '../';
@@ -18,6 +16,7 @@ const deviceInfo: DeviceInfo = {
   productName:      'productName',
   manufacturerName: 'manufacturerName',
   deviceName:       'deviceName',
+  hasPermission:    false,
 };
 
 const notDeviceInfo = {
@@ -28,19 +27,6 @@ const notDeviceInfo = {
 it('type guards enforce DeviceInfo appropriately', () => {
   expect(isDeviceInfo(deviceInfo)).toBe(true);
   expect(isDeviceInfo(notDeviceInfo)).toBe(false);
-});
-
-const deviceList: DeviceList = {
-  [deviceInfo.deviceName]: { ...deviceInfo },
-};
-
-const notDeviceList = {
-  [notDeviceInfo.deviceName]: { ...notDeviceInfo },
-};
-
-it('type guards enforce DeviceList appropriately', () => {
-  expect(isDeviceList(deviceList)).toBe(true);
-  expect(isDeviceList(notDeviceList)).toBe(false);
 });
 
 const deviceEvent: DeviceEvent = {

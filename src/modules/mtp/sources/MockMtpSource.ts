@@ -1,16 +1,20 @@
 import { MtpSource } from './MtpSource';
 import { injectable } from 'inversify';
-import { MtpObjectInfo } from 'modules/mtp/models';
 
 @injectable()
 export class MockMtpSource implements MtpSource {
-    readonly EVENT_MTP_SCAN = 'EVENT_MTP_SCAN';
+    readonly EVENT_DEVICE_ATTACHED = 'EVENT_DEVICE_ATTACHED'
+    readonly EVENT_DEVICE_DETACHED = 'EVENT_DEVICE_DETACHED'
 
-    scan(): Promise<MtpObjectInfo[]> {
-      return Promise.resolve([]);
+    async getDeviceInfo() {
+      return null;
     }
 
-    copyOne() {
-      return Promise.resolve(true);
+    async getObjectHandles() {
+      return [];
+    }
+
+    async requestDevicePermission() {
+      return false;
     }
 }
