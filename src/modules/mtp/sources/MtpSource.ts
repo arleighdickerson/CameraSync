@@ -5,5 +5,5 @@ export interface MtpSource {
     readonly EVENT_DEVICE_DETACHED: string;
     getDeviceInfo: () => Promise<DeviceInfo | null>
     requestDevicePermission: () => Promise<boolean>,
-    getObjectHandles: () => Promise<MtpObjectInfo[]>
+    scanObjectHandles: () => Promise<MtpObjectInfo[]>
 }

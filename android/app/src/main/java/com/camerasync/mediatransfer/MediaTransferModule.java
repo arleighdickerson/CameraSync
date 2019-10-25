@@ -70,9 +70,11 @@ public class MediaTransferModule extends ReactContextBaseJavaModule {
     }
   }
 
+  // @todo send a reason for promise rejection
   @ReactMethod
   public void requestDevicePermission(Promise p) {
     if (usbDevice == null) {
+      // reason: no device connected
       p.resolve(false);
       return;
     }
@@ -95,6 +97,7 @@ public class MediaTransferModule extends ReactContextBaseJavaModule {
       @Override
       public void onReceive(Context context, Intent intent) {
         if (actionName.equals(intent.getAction())) {
+          // reason: permission denied
           p.resolve(
             intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
           );
@@ -109,7 +112,7 @@ public class MediaTransferModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void getObjectHandles(Promise p) {
+  public void scanObjectHandles(Promise p) {
     new ScanObjectHandlesTask(usbDevice, getUsbManager(), p).execute();
   }
 
