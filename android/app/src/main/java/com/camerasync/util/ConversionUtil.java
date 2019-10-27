@@ -62,12 +62,12 @@ public final class ConversionUtil {
     WritableMap payload = Arguments.createMap();
 
     payload.putString("name", mtpObjectInfo.getName());
-    payload.putInt("dateCreated", (int) mtpObjectInfo.getDateCreated());
-    payload.putInt("dateModified", (int) mtpObjectInfo.getDateModified());
+    payload.putInt("objectHandle", mtpObjectInfo.getObjectHandle());
+    payload.putInt("dateCreated", Long.valueOf(mtpObjectInfo.getDateCreated()).intValue());
+    payload.putInt("dateModified", Long.valueOf(mtpObjectInfo.getDateModified()).intValue());
 
     payload.putInt("imagePixWidth", mtpObjectInfo.getImagePixWidth());
     payload.putInt("imagePixHeight", mtpObjectInfo.getImagePixHeight());
-
 
     return payload;
   }

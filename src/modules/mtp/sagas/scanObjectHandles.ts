@@ -1,24 +1,24 @@
-import { all, fork, getContext, takeEvery } from 'redux-saga/effects';
+import { all, fork, getContext, takeEvery, put } from 'redux-saga/effects';
 import { getToken } from 'inversify-token';
 import * as TYPES from 'types';
-import {
-  actionTypes,
-} from '../actions';
+import * as actions from '../actions';
 
 function* scanObjectHandles() {
   const container = yield getContext('container');
   const mtpSource = getToken(container, TYPES.MtpSource);
   try {
     const results = yield mtpSource.scanObjectHandles();
+    yield put(actions.scanObjectsAsync.success(results));
     console.log(results);
   } catch (e) {
+    yield put(actions.scanObjectsAsync.failure(e));
     console.error(e);
   }
   // yield put(createAction());
 }
 
 function* watchForUserToRequestToScanObjectHandles() {
-  yield takeEvery(actionTypes.REQUEST_OBJECT_HANDLE_SCAN, scanObjectHandles);
+  yield takeEvery(actions.scanObjectsAsync.request, scanObjectHandles);
 }
 
 export default function* authorizeDevice() {

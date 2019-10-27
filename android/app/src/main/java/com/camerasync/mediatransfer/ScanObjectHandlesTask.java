@@ -93,6 +93,8 @@ class ScanObjectHandlesTask extends AsyncTask<Integer, Void, WritableArray> {
 
           if (mtpObjectInfo.getProtectionStatus()
             != MtpConstants.PROTECTION_STATUS_NON_TRANSFERABLE_DATA
+            && mtpObjectInfo.getImagePixWidth() > 0
+            && mtpObjectInfo.getImagePixHeight() > 0
           ) {
             WritableMap map = ConversionUtil.asWritableMap(mtpObjectInfo);
 

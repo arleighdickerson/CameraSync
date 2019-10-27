@@ -1,29 +1,57 @@
 import { createReducer } from 'typesafe-actions';
 import * as actions from './actions';
 
-import { DeviceInfo } from './models';
+import { DeviceInfo, MtpObjectInfo } from './models';
 
-export type DeviceState = DeviceInfo | null
+type Images = { [key: number]: MtpObjectInfo }
 
-export default createReducer<DeviceState>(null)
+type DeviceState = {
+    device?: DeviceInfo,
+    images?: Images
+}
+
+export default createReducer<DeviceState>({})
   .handleAction(actions.attachDevice, (state, action) => {
-    return { ...action.payload };
+    return { device: { ...action.payload } };
   })
   .handleAction(actions.detachDevice, () => {
-    return null;
+    return {};
   })
-  .handleAction(actions.devicePermissionDenied, (state) => {
-    if (state !== null) {
-      return { ...state, hasPermission: false };
-    }
-    return state;
-  })
-  .handleAction(actions.devicePermissionGranted, (state) => {
+  .handleAction(actions.scanObjectsAsync.success, (state, action) => {
+    const { images = {} } = state;
 
-    if (state !== null) {
-      return { ...state, hasPermission: true };
-    }
+    const oldResults: MtpObjectInfo[] = Object.values(images);
+    const newResults: MtpObjectInfo[] = action.payload;
 
-    return state;
+    const newImages: Images = {};
+
+    oldResults.concat(newResults).forEach(mtpObjectInfo => {
+      const old = newImages[mtpObjectInfo.objectHandle];
+      newImages[mtpObjectInfo.objectHandle] = { ...old, ...mtpObjectInfo };
+    });
+
+    return { ...state, images: newImages };
+
   });
+
+/*
+.handleAction(actions.devicePermissionDenied, (state) => {
+if (state !== null) {
+  return {
+    ...state,
+    // hasPermission: false
+  };
+}
+return state;
+})
+.handleAction(actions.devicePermissionGranted, (state) => {
+if (state !== null) {
+  return {
+    ...state,
+    // hasPermission: true
+  };
+}
+return state;
+});
+ */
 
