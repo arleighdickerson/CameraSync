@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
+    "@react-native-community/cameraroll": "^1.2.1",
     "aspect.js": "^0.8.1",
     "events": "^3.0.0",
     "immutable": "^4.0.0-rc.12",

@@ -24,4 +24,8 @@ export abstract class MtpSourceWrapper implements MtpSource {
     scanObjectHandles() {
       return this.delegate.scanObjectHandles();
     }
+
+    requestStoragePermission() {
+      return this.delegate.requestStoragePermission();
+    }
 }

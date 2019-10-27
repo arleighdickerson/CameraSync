@@ -17,4 +17,8 @@ export class MockMtpSource implements MtpSource {
     async requestDevicePermission() {
       return false;
     }
+
+    async requestStoragePermission() {
+      return false;
+    }
 }

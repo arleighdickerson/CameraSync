@@ -7,7 +7,10 @@ import android.mtp.MtpConstants;
 import android.mtp.MtpDevice;
 import android.mtp.MtpObjectInfo;
 import android.os.AsyncTask;
+import android.util.Base64;
 import com.camerasync.mediatransfer.DeviceEvent.Type;
+import com.camerasync.mediatransfer.exceptions.MtpDeviceException;
+import com.camerasync.mediatransfer.exceptions.UsbConnectionException;
 import com.camerasync.util.ConversionUtil;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -30,7 +33,7 @@ class ScanObjectHandlesTask extends AsyncTask<Integer, Void, WritableArray> {
   private UsbDeviceConnection connection;
   private MtpDevice mtpDevice;
 
-  private String errorMessage;
+  private Exception ex;
 
   @Override
   protected void onPreExecute() {
@@ -39,7 +42,7 @@ class ScanObjectHandlesTask extends AsyncTask<Integer, Void, WritableArray> {
     connection = usbManager.openDevice(usbDevice);
 
     if (connection == null) {
-      errorMessage = "could not open usb device";
+      ex = new UsbConnectionException("Could not open usb device");
       this.cancel(true);
       return;
     }
@@ -47,7 +50,7 @@ class ScanObjectHandlesTask extends AsyncTask<Integer, Void, WritableArray> {
     MtpDevice mtpDevice = new MtpDevice(usbDevice);
 
     if (!mtpDevice.open(connection)) {
-      errorMessage = "could not open mtp device";
+      ex = new MtpDeviceException("Could not open mtp device");
       this.cancel(true);
       return;
     }
@@ -86,11 +89,19 @@ class ScanObjectHandlesTask extends AsyncTask<Integer, Void, WritableArray> {
 
       if (objectHandles != null) {
         for (int objectHandle : objectHandles) {
-          MtpObjectInfo info = mtpDevice.getObjectInfo(objectHandle);
+          MtpObjectInfo mtpObjectInfo = mtpDevice.getObjectInfo(objectHandle);
 
-          if (info.getProtectionStatus()
-            != MtpConstants.PROTECTION_STATUS_NON_TRANSFERABLE_DATA) {
-            WritableMap map = ConversionUtil.asWritableMap(info);
+          if (mtpObjectInfo.getProtectionStatus()
+            != MtpConstants.PROTECTION_STATUS_NON_TRANSFERABLE_DATA
+          ) {
+            WritableMap map = ConversionUtil.asWritableMap(mtpObjectInfo);
+
+            byte[] thumbnailBytes = mtpDevice.getThumbnail(objectHandle);
+
+            if (thumbnailBytes != null) {
+              String base64 = Base64.encodeToString(thumbnailBytes, Base64.DEFAULT);
+              map.putString("thumbnail", base64);
+            }
 
             results.pushMap(map);
           }
@@ -120,7 +131,7 @@ class ScanObjectHandlesTask extends AsyncTask<Integer, Void, WritableArray> {
     if (writableArray != null) {
       map.putArray("results", writableArray);
     }
-    promise.reject(errorMessage == null ? "task was canceled" : errorMessage, map);
+    promise.reject(ex == null ? new Exception("task was canceled") : ex);
     close();
   }
 

@@ -15,8 +15,7 @@ const deviceInfo: DeviceInfo = {
   version:          'version',
   productName:      'productName',
   manufacturerName: 'manufacturerName',
-  deviceName:       'deviceName',
-  hasPermission:    false,
+  deviceName:       'deviceName'
 };
 
 const notDeviceInfo = {

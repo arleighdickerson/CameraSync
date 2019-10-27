@@ -65,6 +65,10 @@ public final class ConversionUtil {
     payload.putInt("dateCreated", (int) mtpObjectInfo.getDateCreated());
     payload.putInt("dateModified", (int) mtpObjectInfo.getDateModified());
 
+    payload.putInt("imagePixWidth", mtpObjectInfo.getImagePixWidth());
+    payload.putInt("imagePixHeight", mtpObjectInfo.getImagePixHeight());
+
+
     return payload;
   }
 }

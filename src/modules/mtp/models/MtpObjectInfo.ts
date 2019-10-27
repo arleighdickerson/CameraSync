@@ -6,5 +6,8 @@ export interface MtpObjectInfo {
     // negative value of milliseconds before "now" the item was modified
     // divide by 1000 for unix timestamp diff from now
     dateCreated: number,
-    dateModified: number
+    dateModified: number,
+    imagePixWidth: number,
+    imagePixHeight: number,
+    thumbnail?: string // base64-encoded
 }
