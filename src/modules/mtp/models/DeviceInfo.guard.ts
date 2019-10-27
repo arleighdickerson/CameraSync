@@ -16,7 +16,6 @@ export function isDeviceInfo(obj: any, _argumentName?: string): obj is DeviceInf
         typeof obj.version === "string" &&
         typeof obj.productName === "string" &&
         typeof obj.manufacturerName === "string" &&
-        typeof obj.deviceName === "string" &&
-        typeof obj.hasPermission === "boolean"
+        typeof obj.deviceName === "string"
     )
 }

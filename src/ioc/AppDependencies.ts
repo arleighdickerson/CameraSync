@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
 import _createSagaMiddleware from 'redux-saga';
 import {
@@ -41,7 +40,7 @@ const defaults: DependencyOptions = {
     port:     8000,
     realtime: process.env.NODE_ENV !== 'test',
   },
-    /*
+  /*
   persistConfig: {
     key:       'root',
     storage:   AsyncStorage,

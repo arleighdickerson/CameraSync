@@ -17,7 +17,9 @@ export default (container: interfaces.Container) => new TokenContainerModule((bi
     .to(isTest ? MockMtpSource : NativeMtpSource)
     .inSingletonScope()
     .onActivation((context: interfaces.Context, mtpSource: MtpSource) => {
+
       const dispatch = (action: any) => getToken(context.container, TYPES.Store).dispatch(action);
+      const emitter = getToken(context.container, TYPES.EventSource);
 
       const handlers = {
         [mtpSource.EVENT_DEVICE_ATTACHED]: (evt: any) => {
@@ -31,6 +33,10 @@ export default (container: interfaces.Container) => new TokenContainerModule((bi
           }
         },
       };
+
+      Object.entries(handlers).forEach(([event, listener]) => {
+        emitter.addListener(event, listener);
+      });
 
       return mtpSource;
     });

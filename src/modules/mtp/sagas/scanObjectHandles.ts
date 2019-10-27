@@ -1,4 +1,4 @@
-import { all, fork, getContext, put, takeEvery } from 'redux-saga/effects';
+import { all, fork, getContext, takeEvery } from 'redux-saga/effects';
 import { getToken } from 'inversify-token';
 import * as TYPES from 'types';
 import {

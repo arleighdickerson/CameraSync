@@ -1,7 +1,7 @@
 import events from 'events';
 import { TokenContainerModule } from 'inversify-token';
-import { isTest } from '../util/env';
-import * as TYPES from '../types';
+import { isTest } from 'util/env';
+import * as TYPES from 'types';
 
 export const mockEventSourceFactory = (): events.EventEmitter => {
   return new events.EventEmitter();
