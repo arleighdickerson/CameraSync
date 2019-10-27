@@ -16,8 +16,6 @@ public class MediaTransferPackage implements ReactPackage {
   public List<ViewManager> createViewManagers(@Nonnull ReactApplicationContext reactContext) {
     List<ViewManager> viewManagers = new ArrayList<>();
 
-    // viewManagers.add(new MediaTransferImageManager(reactContext));
-
     return viewManagers;
   }
 
