@@ -1,4 +1,4 @@
-import { MtpObjectInfo,DeviceInfo } from '../models';
+import { MtpObjectInfo, DeviceInfo } from '../models';
 
 export interface MtpSource {
     readonly EVENT_DEVICE_ATTACHED: string;
