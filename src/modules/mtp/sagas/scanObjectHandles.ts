@@ -3,7 +3,7 @@ import { getToken } from 'inversify-token';
 import * as TYPES from 'types';
 import * as actions from '../actions';
 
-function* scanObjectHandles() {
+function* scan() {
   const container = yield getContext('container');
   const mtpSource = getToken(container, TYPES.MtpSource);
   try {
@@ -18,10 +18,10 @@ function* scanObjectHandles() {
 }
 
 function* watchForUserToRequestToScanObjectHandles() {
-  yield takeEvery(actions.scanObjectsAsync.request, scanObjectHandles);
+  yield takeEvery(actions.scanObjectsAsync.request, scan);
 }
 
-export default function* authorizeDevice() {
+export default function* scanObjectHandles() {
   yield all([
     fork(watchForUserToRequestToScanObjectHandles),
   ]);

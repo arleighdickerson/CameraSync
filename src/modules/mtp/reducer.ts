@@ -5,12 +5,12 @@ import { DeviceInfo, MtpObjectInfo } from './models';
 
 type Images = { [key: number]: MtpObjectInfo }
 
-type DeviceState = {
+type State = {
     device?: DeviceInfo,
     images?: Images
 }
 
-export default createReducer<DeviceState>({})
+const reducer = createReducer<State>({})
   .handleAction(actions.attachDevice, (state, action) => {
     return { device: { ...action.payload } };
   })
@@ -34,6 +34,8 @@ export default createReducer<DeviceState>({})
 
   });
 
+export default reducer;
+
 /*
 .handleAction(actions.devicePermissionDenied, (state) => {
 if (state !== null) {
@@ -54,4 +56,3 @@ if (state !== null) {
 return state;
 });
  */
-

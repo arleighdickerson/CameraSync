@@ -61,14 +61,29 @@ public final class ConversionUtil {
   public static WritableMap asWritableMap(MtpObjectInfo mtpObjectInfo) {
     WritableMap payload = Arguments.createMap();
 
-    payload.putString("name", mtpObjectInfo.getName());
     payload.putInt("objectHandle", mtpObjectInfo.getObjectHandle());
-    payload.putInt("dateCreated", Long.valueOf(mtpObjectInfo.getDateCreated()).intValue());
-    payload.putInt("dateModified", Long.valueOf(mtpObjectInfo.getDateModified()).intValue());
+    payload.putString("name", mtpObjectInfo.getName());
 
     payload.putInt("imagePixWidth", mtpObjectInfo.getImagePixWidth());
     payload.putInt("imagePixHeight", mtpObjectInfo.getImagePixHeight());
 
+    int dateCreated = convertToUnix(mtpObjectInfo.getDateCreated());
+    int dateModified = convertToUnix(mtpObjectInfo.getDateModified());
+
+    payload.putInt("dateCreated", dateCreated);
+    payload.putInt("dateModified", dateModified);
+
     return payload;
+  }
+
+  static Integer convertToUnix(long microtime) {
+    if (microtime == 0L) {
+      return 0;
+    }
+
+    String millis = Long.valueOf(microtime).toString();
+    String seconds = millis.substring(0, millis.length() - 3);
+
+    return Integer.parseInt(seconds);
   }
 }
