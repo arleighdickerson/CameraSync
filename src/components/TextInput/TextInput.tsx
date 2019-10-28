@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
-
-// components
-import { InputProps, Input } from 'react-native-elements';
+import {
+  StyleProp,
+  ViewStyle,
+  TextInput as Input,
+  TextInputProps as InputProps, View, Text,
+} from 'react-native';
 
 // styles
 import styles from './styles';
@@ -52,22 +54,27 @@ class TextInput extends Component<Props> {
         ...rest
       } = this.props;
 
+      const errorMessage = this.shouldDisplayError() ? error[0] : undefined;
+
       return (
-        <Input
-          containerStyle={[styles.defaultContainer, containerStyle]}
-          onBlur={input.onBlur}
-          onChange={input.onChange}
-          onFocus={input.onFocus}
-          value={input.value}
-          errorMessage={
-            // @todo test this
-            this.shouldDisplayError()
-              ? error[0]
-              : undefined
+        <View style={[styles.defaultContainer, containerStyle]}>
+          <Input
+            onBlur={input.onBlur}
+            onChange={input.onChange}
+            onFocus={input.onFocus}
+            value={input.value}
+            {...rest}
+          />
+          {
+            errorMessage
+              ? (
+                <Text style={[styles.defaultError, errorStyle]}>
+                  {errorMessage}
+                </Text>
+              )
+              : null
           }
-          errorStyle={[styles.defaultError, errorStyle]}
-          {...rest}
-        />
+        </View>
       );
     }
 }

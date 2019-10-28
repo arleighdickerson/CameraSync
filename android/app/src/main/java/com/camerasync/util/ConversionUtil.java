@@ -76,7 +76,7 @@ public final class ConversionUtil {
     return payload;
   }
 
-  static Integer convertToUnix(long microtime) {
+  private static Integer convertToUnix(long microtime) {
     if (microtime == 0L) {
       return 0;
     }

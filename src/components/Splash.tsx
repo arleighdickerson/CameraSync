@@ -1,7 +1,6 @@
 import React from 'react';
-import colors from 'assets/colors';
 import {
-  ActivityIndicator,
+  ActivityIndicator, ActivityIndicatorProps,
   StyleSheet,
   View,
 } from 'react-native';
@@ -18,8 +17,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default () => (
-  <View style={ [styles.container, styles.horizontal] }>
-    <ActivityIndicator size="large" color={ colors.primary } />
-  </View>
-);
+export default function Splash(props: ActivityIndicatorProps) {
+  return (
+    <View style={[styles.container, styles.horizontal]}>
+      <ActivityIndicator {...props}/>
+    </View>
+  );
+}
+
+Splash.defaultProps = {
+  size: 'large',
+};

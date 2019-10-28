@@ -1,71 +1,36 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 import GalleryImage from './GalleryImage';
 import { MtpObjectInfo } from 'modules/mtp/models';
+
+// import { Col, Row, Grid } from "react-native-easy-grid";
+// import { SectionGrid } from 'react-native-super-grid';
 
 export type GalleryViewProps = {
     images: MtpObjectInfo[]
 }
 
-type GalleryViewState = {
-    shown: boolean,
-    index: number
-}
+const styles = StyleSheet.create({
+  contentContainer: {
+    flexDirection: 'row',
+    flexWrap:      'wrap',
+  },
+});
 
-export default class GalleryView extends Component<GalleryViewProps, GalleryViewState> {
-    readonly showLightbox: (index: number) => any
-    readonly hideLightbox: () => any
+export default function GalleryView(props: GalleryViewProps) {
+  const { images = [] } = props;
 
-    constructor(props: GalleryViewProps) {
-      super(props);
-      this.showLightbox = (index) => {
-        this.setState({
-          index,
-          shown: true,
-        });
-      };
-      this.hideLightbox = () => {
-        this.setState({
-          index: 0,
-          shown: false,
-        });
-      };
-    }
+  const children = images.map((image, idx) => (
+    <GalleryImage
+      index={idx}
+      key={idx}
+      uri={`data:image/jpg;base64,${image.thumbnail}`}
+    />
+  ));
 
-    state = {
-      index: 0,
-      shown: false,
-    };
-
-    render() {
-      const { images } = this.props;
-      const { index, shown } = this.state;
-      return (
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap:      'wrap',
-          }}
-        >
-          {images.map((image, idx) => (
-            <GalleryImage
-              index={idx}
-              key={idx}
-              onPress={this.showLightbox}
-              uri={`data:image/jpg;base64,${image.thumbnail}`}
-            />
-          ))}
-
-          {/*
-           <ImageViewer
-              shown={shown}
-              imageUrls={images}
-              onClose={this.hideLightbox}
-              index={index}
-            />
-            */}
-
-        </View>
-      );
-    }
+  return (
+    <ScrollView contentContainerStyle={styles.contentContainer}>
+      {children}
+    </ScrollView>
+  );
 }

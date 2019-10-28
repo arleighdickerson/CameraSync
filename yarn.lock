@@ -6980,7 +6980,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.3"
 
-prop-types@^15.5.10, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -7118,6 +7118,13 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-easy-grid@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-easy-grid/-/react-native-easy-grid-0.2.2.tgz#f0be33620be1ebe2d2295918eb58b0a27e8272ab"
+  integrity sha512-MlYrNIldnEMKn6TVatQN1P64GoVlwGIuz+8ncdfJ0Wq/xtzUkQwlil8Uksyp7MhKfENE09MQnGNcba6Mx3oSAA==
+  dependencies:
+    lodash "^4.17.15"
+
 react-native-elements@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-1.2.1.tgz#03348f8519d6e76188cceb16f46f83f69e1fdda4"
@@ -7173,6 +7180,13 @@ react-native-status-bar-height@^2.2.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.4.0.tgz#de8cee4bb733a196167210d2d0bc1fa10acba3e3"
   integrity sha512-pWvZFlyIHiuxLugLioq97vXiaGSovFXEyxt76wQtbq0gxv4dGXMPqYow46UmpwOgeJpBhqL1E0EKxnfJRrFz5w==
+
+react-native-super-grid@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-3.1.1.tgz#27652de0827d158ba0ab400631f30c74a68f8550"
+  integrity sha512-qtnoXDKDG/hfqPzmXt34HGNjlOL1D7+efYlaaECCGp2MwOZxE7MTDy9pHGtpTcrM8JRTVyqB1Piy1SkkWEa80Q==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-native-typescript-transformer@^1.2.13:
   version "1.2.13"

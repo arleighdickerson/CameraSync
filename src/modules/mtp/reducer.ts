@@ -3,7 +3,8 @@ import * as actions from './actions';
 
 import { DeviceInfo, MtpObjectInfo } from './models';
 
-type Images = { [key: number]: MtpObjectInfo }
+
+export type Images = { [key: number]: MtpObjectInfo }
 
 type State = {
     device?: DeviceInfo,
