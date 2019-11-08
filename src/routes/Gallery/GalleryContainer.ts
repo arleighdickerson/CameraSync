@@ -9,8 +9,8 @@ const mapStateToProps = (state: RootState): GalleryViewProps => ({
   images: getImages(state),
 });
 
+
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  //
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GalleryView);

@@ -38,7 +38,7 @@ function* watchForWhenDeviceIsAttached() {
 }
 
 function* handleScanSuccess(action: ActionType<typeof deviceActions.scanObjectsAsync.success>) {
-  yield put(NavigationActions.navigate({ routeName: 'Gallery' }));
+  yield put(NavigationActions.navigate({ routeName: 'GalleryGrid' }));
 }
 
 function* watchForScanResult() {
