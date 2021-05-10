@@ -18,7 +18,7 @@
     "inversify-binding-decorators": "^4.0.0",
     "inversify-inject-decorators": "^3.1.0",
     "inversify-token": "^5.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "react": "16.9.0",
     "react-native": "0.60.5",
     "react-native-easy-grid": "^0.2.2",
